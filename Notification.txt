@@ -1,0 +1,35 @@
+1.请求交互类型授权 UN （config user interactions）（如果要及时交互那就用alert，否则用sound和badge）
+
+2.注册通知类别 UN
+
+3.请求token(注册接收远程通知（获取token）    talk to APNs)
+
+4.开启Push Notifications capability(远程通知：Xcode add needed entitlements  to your project)
+
+5.用UN的getNotificationSettingsWithCompletionHandler:方法获取用户的通知设置，来调整通知相关的代码
+
+6.用UN的getDeliveredNotificationsWithCompletionHandler: 方法获取用户通知中心中用户或app未直接处理的通知，从而可以移除过期的本地通知
+
+7.app处于not running或background状态时，系统自动用你指定的交互方式来传递通知。如果用户选择了一个action或者选择了某个标准的系统交互，系统会通知你的app
+
+8.如果app处于foreground，通知会直接传递给app，你可以决定时静默处理(系统默认)还是提醒用户（需要实现UNCenter的代理方法：userNotificationCenter:willPresentNotification:withCompletionHandler:，只有app在前台收到通知时才会调用该方法）
+
+9.要响应通知的传递必须实现UNCenter的代理，如果有自定义动作按钮，代理是必须的。
+
+10.当用户选择了通知界面的一个自定义按钮时，系统通知UNCenter的代理：userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler: ，如果此时app not running，系统会在后台启动你的app或app extension来处理响应，可以利用后台时间来更新数据结构后用户界面来反映用户的选择
+
+11.用户可以启动app或显式地关闭通知界面（这里的显式指的时点击了某个系统功能按钮或者直接关闭，忽略通知或把通知横幅划掉不算是显式地关闭界面）此时，系统也会在 userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler: 方法中通知UNCenter的代理。在这个方法中检查response的actionIdentifier,如果是UNNotificationDismissActionIdentifier(说明用户显式地让通知界面消失了，而不是点击了某个自定义按钮)
+如果是UNNotificationDefaultActionIdentifier，表示用户启动了app，也没有点击某个自定义按钮
+
+12.除了用UN框架处理通知，对于远程通知还可以在app的代理方法：application:didReceiveRemoteNotification:fetchCompletionHandler:中处理
+当app在后台收到远程通知时，系统会把通知的payload传递到该方法。
+
+13.创建silent remote notification
+需要Enable background mode中的Remote Notification capability
+收到Silent remote notification时，系统会启动你没在运行的app，并给它30秒地后台运行时间。这对于你的app很旧不运行了扔想保持最新状态是很有用的
+
+14.另外可以分别用notification service app extension和notification content app extension来改变payload的内容和自定义通知界面
+
+15.总之处理通知，不管是本地的还是远程的foreground )：用userNotificationCenter:willPresentNotification:withCompletionHandler:处理
+background)：用userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:
+;如果时远程通知还可以用application:didReceiveRemoteNotification:fetchCompletionHandler:

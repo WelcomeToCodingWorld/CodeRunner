@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>iOS App Life Cycle</title>
+	</head>
+	<body>
+		<ul>
+			<li>Not running:</li>
+		</ul>
+		<p>The app has not been launched or was running but was terminated by the system. (还没启动，或者说被系统终止了)</p>
+		<ul>
+			<li>Inactive:</li>
+		</ul>
+		<p>The app is running in the foreground but is currently not receiving events. (It may be executing other code though.) An app usually stays in this state only briefly as it transitions to a different state.(app运行在前台，但是不接受事件，可能在执行其他的一些代码。app处于这一状态的事件比较短暂，马上会进入另一状态)</p>
+		<ul>
+			<li>Active:</li>
+		</ul>
+		<p>The app is running in the foreground and is receiving events. This is the normal mode for foreground apps.(APP运行在前台并且接受事件，这是前台app的大多数时候的正常状态)</p>
+		<ul>
+			<li>Background:</li>
+		</ul>
+		<p>The app is in the background and executing code. Most apps enter this state briefly on their way to being suspended. However, an app that requests extra execution time may remain in this state for a period of time. In addition, an app being launched directly into the background enters this state instead of the inactive state. For information about how to execute code while in the background, see Background Execution. (app处于后台并还在执行一些代码，大多数app进入挂起前会短暂地处于该状态，但是如果app向系统请求了额外的后台执行时间，那么它还会被允许多待一段时间处于该状态。另外，一个被启动直接进入后台的app就处于该状态，而不是处于inactive状态。)</p>
+		<ul>
+			<li>Suspended:</li>
+		</ul>
+		<p>The app is in the background but is not executing code. The system moves apps to this state automatically and does not notify them before doing so. While suspended, an app remains in memory but does not execute any code.(处于挂起状态时，app处于后台但不在执行任何代码，系统会自动把app调入该状态，而不会通知该app。该状态下的app仍然在内存中但不执行任何代码)
+		 </p>
+		<p>When a low-memory condition occurs, the system may purge suspended apps without notice to make more space for the foreground app.(当内存紧张时，系统可能会把app从内存清除掉进入Notrunning状态而不通知该app，以便为前台的应用腾出更多空间)</p>
+		<p>Most state transitions are accompanied by a corresponding call to the methods of your app delegate object. These methods are your chance to respond to state changes in an appropriate way. These methods are listed below, along with a summary of how you might use them. (app大多数状态之间的转换会调用你app代理中相应的方法)</p>
+		<ul>
+			<li>application:willFinishLaunchingWithOptions:—This method is your app’s first chance to execute code at launch time.This method is called after your app has been launched and its main storyboard or nib file has been loaded, but before your app’s state has been restored. At the time this method is called, your app is in the inactive state. When asked to open a URL, the return result from this method is combined with the return result from the application:didFinishLaunchingWithOptions: method to determine if a URL should be handled(app整个生命周期第一次执行代码，启动时执行，调用该方法时，app处于inactive状态，状态还为恢复，当要打开一个URL时，该方法和下一个方法都要返回yes(默认就返回yes),才允许打开，任一方返回no,系统都不会调用application:openURL:options:方法)</li>
+			<li>application:didFinishLaunchingWithOptions:—This method allows you to perform any final initialization before your app is displayed to the user.his method is called after state restoration has occurred but before your app’s window and other UI have been presented. At some point after this method returns, the system calls another of your app delegate’s methods to move the app to the active (foreground) state or the background state.The return value is ignored if the app is launched as a result of a remote notification.(即将第一次展现给用户，在这里可以完成最后的初始化工作,此时状态已经恢复，如果app是被远程通知启动的，那么返回值奖杯忽略)</li>
+			<li>applicationDidBecomeActive:—Lets your app know that it is about to become the foreground app. Use this method for any last minute preparation. (刚进入active状态)</li>
+			<li>applicationWillResignActive:—Lets you know that your app is transitioning away from being the foreground app. Use this method to put your app into a quiescent state. (即将resign Actice)</li>
+			<li>applicationDidEnterBackground:—Lets you know that your app is now running in the background and may be suspended at any time.Your implementation of this method has approximately five seconds to perform any tasks and return. If you need additional time to perform any final tasks, you can request additional execution time from the system by calling beginBackgroundTaskWithExpirationHandler:. In practice, you should return from applicationDidEnterBackground: as quickly as possible. If the method does not return before time runs out your app is terminated and purged from memory.（刚进入background状态，随时可能被挂起)，这个方法里的代码有将近5秒钟的时间返回，除非执行beginBackgroundTaskWithExpirationHandler:来延长一段时间，但是要尽快返回，否则如果时间到了还没有返回，一般在这里要释放公共资源（如用户联系人数据库），销毁定时器，保存足够的现场信息以便如果app被随后终止了再次恢复到当前状态，你还应该停止更新UI，避免在后台使用OpenGL ES也是必要的，系统将终止你的app并把它清除出内存）</li>
+			<li>applicationWillEnterForeground:—Lets you know that your app is moving out of the background and back into the foreground, but that it is not yet active.（app即将从后台重新回到前台，进入inactive状态）</li>
+			<li>applicationWillTerminate:—Lets you know that your app is being terminated. This method is not called if your app is suspended.(app即将Notrunning，如果app处于suspended状态，该方法不会被调用)</li>
+		</ul>
+		<p>app启动的原因大概有两种：</p>
+		<ul>
+			<li>用户手动点击app图标启动(此时launchOptions字典为空)</li>
+			<li>被另一个app请求调起</li>
+			<li>点击远程推送通知调起</li>
+		</ul>
+		<p>launchOptions字典中UIApplicationLaunchOptionsURLKey
+的存在说明app启动的原因时要打开一个URL,比如一个视频播放链接，一个新闻链接等等</p>
+<p>UIApplicationLaunchOptionsRemoteNotificationKey的存在表明有推送等待处理</p>
+<p>UIApplicationLaunchOptionsLocationKey：The presence of this key indicates that the app was launched in response to an incoming location event. The value of this key is an NSNumber object containing a Boolean value. You should use the presence of this key as a signal to create a CLLocationManager object and start location services again. Location data is delivered only to the location manager delegate and not using this key.</p>
+	</body>
+</html>

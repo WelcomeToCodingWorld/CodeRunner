@@ -1,0 +1,2 @@
+find . -name "*.m" -or -name "*.h" -or -name "*.xib" -or -name "*.c" |xargs grep -v "^$"|wc -l  
+//统计代码总行数

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>APNs</title>
+	</head>
+	<body>
+		<h3>APNs Overview</h3>
+		<p>Apple Push Notification service (APNs) is the centerpiece of the remote notifications feature. It is a robust and highly efficient service for propagating information to iOS (and, indirectly, watchOS), tvOS, and macOS devices. On initial launch, your app establishes an accredited and encrypted IP connection with APNs from the user’s device. Over time, APNs delivers notifications using this persistent connection. If a notification arrives when your app is not running, the device receives the notification and handles its delivery to your app at an appropriate time. (苹果远程推送服务简称APNs是远程通知功能的中心。这是一项健壮而且高效的向iOS，间接向watchOS，tvOS，macOS设备发送消息的服务。app启动时，与APNs从用户的设备建立了一条可信的、加密的IP连接。之后，APNs用这条连接发送通知。当设备收到通知时你的app notRunning，设备会在合适的时间将其发送给你的app)</p>
+		<p>In addition to APNs and your app, another piece is required for the delivery of remote notifications. You must configure your own server to originate those notifications. Your server, known as the provider, has the following responsibilities: (除了APNs和你的app，发送远程通知还必须做另一件事儿。你必须配置你们的服务器来发起这些通知。你们的服务器，也叫提供商，需要做以下这些工作：)</p>
+		<ul>
+			<li>It receives device tokens and relevant data from your app. (从你们的app接收设备token和相关的数据)</li>
+			<li>It determines when remote notifications need to be sent to a device.(决定需要何时将远程通知推给用户设备)</li>
+			<li>It communicates the notification data to APNs, which then handles the delivery of the notifications to that device. (将通知数据交给APNs，然后就由APNs来处理把通知发给设备的工作)</li>
+		</ul>
+		<h3>For each remote notification, your provider: (对于每个远程通知，你需要提供：)</h3>
+		<ol>
+			<li>Constructs a JSON dictionary with the notification’s payload; described in Creating the Remote Notification Payload. (用通知的payload构造一个JSON字典)</li>
+			<li>Attaches the payload and an appropriate device token to an HTTP/2 request.(把payload和何时的设备token，附加到一个http请求)</li>
+			<li>Sends the request to APNs over a persistent and secure channel that uses the HTTP/2 network protocol(通过一个基于http／2网络协议的持久、安全的通道向APNs发起请求)</li>
+		</ol>
+		<p>For each successful HTTP/2 request, APNs forwards the corresponding notification payload to the user’s device. That device handles the receipt of the payload and manages interactions with the user and the delivery of the payload to your app. (对于每一个成功的http／2请求，APNs都会把相关的通知payload转发到用户的设备。要接收通知的设备来处理payload的接收，管理和用户的交互，把payload的发送给你的app。)</p>
+		<h3>The Path of a Remote Notification(远程通知的路径)</h3>
+		<p>Your provider is responsible for originating remote notifications related to your apps. When you decide it is time to send a notification, your provider packages the notification data into a JSON dictionary, which constitutes the payload to deliver to the device. You package that payload into an HTTP/2 request that includes a device token and other information to use for the delivery of the notification. Your provider then forwards that request to APNs, which then routes the payload to the appropriate user device.(你们的服务器或者provider构造与你们的app相关的远程通知。当你决定要把通知发出去的时候，你们的provider把通知数据打包成JSON字典，该字典组成了要发送给设备的payload。你把payload、设备token和其他一些用于发送通知的信息打包进一个http／2请求。然后你们的服务器把这个请求转发到APNs,最后APNs把payload路由给合适的用户设备)</p>
+		<p>The device token included in each request represents the identity of the device receiving the notification. APNs uses device tokens to identify each unique app and device combination. It also uses them to authenticate the routing of remote notifications sent to a device. Each time your app runs on a device, it fetches this token from APNs and forwards it to your provider. Your provider stores the token and uses it when sending notifications to that particular app and device. The token itself is opaque and persistent, changing only when a device’s data and settings are erased. Only APNs can decode and read a device token. (每个请求中包含的设备token代表了接收通知的设备的标识。APNs用设备token来标识唯一设备上的唯一app。它也用设备token来验证发给设备的远程通知的路由。你的app每次在设备上运行的时候都要从APNs获取该token并把它转发给你们的服务器。你们的服务器把token存起来，需要时用它来发送远程通知给用户设备。token本身是持久且发杂的，只有当设备的数据和设置被清除了才会改变。只有APNs才能编码并读取设备token)</p>
+		<h3>Quality of Service, Store-and-Forward, and Coalesced Notifications(服务质量、存储转发、合并通知)</h3>
+		<p>Apple Push Notification service includes a default Quality of Service (QoS) component that performs a store-and-forward function. If APNs attempts to deliver a notification and the destination device is offline, APNs stores the notification for a limited period of time and delivers it when the device becomes available again. This component stores only the most recent notification per device and per app. If a device is offline, sending a new notification causes the previous notification to be discarded. If a device remains offline for a long time, all stored notifications are discarded. (APNs包含一个默认的执行存储转发函数的服务质量组件，如果APNs试图发送通知给设备，而该设备又处于离线状态。APNs会将通知存储有限的一段时间，当设备可以接收通知的时候转发给它。这个组件只存储每个设备和每个app最近的通知。如果一个设备处于离线状态，APNs收到一条新的通知就会覆盖掉一条旧通知。如果一个设备长期处于离线状态，给该设备的所有通知都会作废)</p>
+		<p>To allow the coalescing of similar notifications, you can include a collapse identifier with the notification request. Normally, when a device is online, each notification you send is delivered to the device. However, when the apns-collapse-id key is present in your HTTP/2 request header, APNs coalesces requests whose value for that key is the same. For example, a news service that sends the same headline twice could use the same collapse identifier value for both notification requests. APNs would then coalesce the two requests into a single notification for delivery to the device.(为了让类似的通知合并发送，你可以在通知请求上加一个合并标识。正常情况下，如果一个设备在线，你发送的每一个通知都会达到设备。然而如果在你通知请求的http/2请求头里有apns-collapse-id键出现，APNs会合并该键相同的请求。例如，一个新闻服务商两次发送相同的头条新闻就可以在每个通知请求中用相同的合并标识，然后APNs会把这两个请求合二为一发送给设备)</p>
+		<p>APNs refuses notifications whose payload exceeds the maximum allowed size. (APNs会拒绝payload允许的最大字节数的通知)</p>
+		<p>Because the delivery of remote notifications is not guaranteed, never include sensitive data or data that can be retrieved by other means in your payload. Instead, use notifications to alert the user to new information or as a signal that your app has data waiting for it. For example, an email app could use remote notifications to badge the app’s icon or to alert the user that new email is available in a specific account, as opposed to sending the contents of email messages directly. Upon receiving the notification, the app should open a direct connection to your email server to retrieve the email messages.(由于远程通知的发送不是总会成功，因此千万不要在payload中包含敏感数据或者可以通过其他方式获取到的数据，而应该用通知提醒用户有新的消息或者给用户一个信号：你的app有新的数据。例如，一个邮件app可以用远程通知来标记app图标或者提醒用户某个账号有新的邮件，而不是直接把邮件的内容发过来。在收到通知后，app应该打开打开到邮件服务器的直接连接来获取邮件内容)</p>
+		<h3>Creating the JSON Dictionary(创建一个JSON字典)</h3>
+		<p>The following examples illustrate the structure of the JSON dictionary and the keys you can include for your notifications. The most important part of the payload is the aps dictionary, which contains Apple-defined keys and is used to determine how the system receiving the notification should alert the user, if at all. The examples also includes keys whose names include the string “acme”, which represent custom data included by a fictional app. Although the examples include whitespace and line breaks for readability, in practice, you should omit whitespace and line breaks to reduce the size of the payload. (以下的例子展示了用于构造payload的JSON字典的结构，以及你可以在你的通知.payload中最重要的一部分是aps字典，该字典中包含了苹果定义的键,这些键用来决定系统收到通知后应该如何提醒用户,这个例子中包含的"acme"的键代表了一个小说app中包含的自定义数据。尽管为了增加可读性例子中包含了空格和换行符，在实际情况中，应该省略这些符号来减少payload的大小)</p>
+		<pre><code>
+{<br>
+	"aps" : { "alert" : "Message received from Bob" },<br>
+	"acme2" : [ "bang",  "whiz" ]<br>
+}<br>
+
+
+
+{<br>
+	"aps" : {<br>
+		"alert" : {<br>
+			"title" : "Game Request",<br>
+			"body" : "Bob wants to play poker",<br>
+			"action-loc-key" : "PLAY"<br>
+		},<br>
+		"badge" : 5<br>
+	},<br>
+	"acme1" : "bar",<br>
+	"acme2" : [ "bang",  "whiz" ]<br>
+}<br>
+//title和body提供了alert的内容，该alet将会有一个close button，和一个动作按钮，"PLAY"用来从localizable.strings文件中获取一个本地化的字符串作为动作按钮的标题
+
+
+
+{<br>
+	"aps" : {<br>
+		"alert" : "You got your emails.",<br>
+		"badge" : 9,<br>
+		"sound" : "bingbong.aiff"<br>
+	},<br>
+	"acme1" : "bar",<br>
+	"acme2" : 42<br>
+}<br>
+
+
+
+
+{<br>
+	"aps" : {<br>
+		"alert" : {<br>
+			"loc-key" : "GAME_PLAY_REQUEST_FORMAT",<br>
+			"loc-args" : [ "Jenna", "Frank"]<br>
+		},<br>
+		"sound" : "chime.aiff"<br>
+	},<br>
+	"acme" : "foo"<br>
+}<br>
+//loc-key specify a localized string in the app’s Localizable.strings file.(获取一个本地化的字符串作为alert的message)
+//The loc-args contains values to substitute into the string before displaying it.(loc-args包含了在显示之前要替换到字符串中的值)
+		</code></pre>
+		<h3>Configuring a Silent Notification(配置静默通知)</h3>
+		<p>Silent notifications improve the user experience by helping you keep your app up-to-date, even when it is not running. When apps do not run for extended periods of time, their data can become outdated. When the user finally launches the app again, the outdated data must be replaced, which can cause a delay in using the app. Silent notifications give you a way to wake up your app periodically so that it can refresh its data in the background. (静默通知通过帮助你即使app is notRunning也能保持处于最新状态，改善了用户体验。当app好久没有运行了，它所包含的数据可能就过期了。当用户再次启动app的时候，这些旧数据必须被替换掉，这就可能引起使用app的延迟。静默通知给了你一种定期唤醒你的app，在后台刷新数据 的方法)</p>
+		<p>Silent notifications are not meant as a way to keep your app awake in the background, nor are they meant for high priority updates. APNs treats silent notifications as low priority and may throttle their delivery altogether if the total number becomes excessive. The actual limits are dynamic and can change based on conditions, but try not to send more than a few notifications per hour. (静默通知并不是说要保持你的app一直在后台运行，也不是用于高优先级的更新。APNs认为静默通知是低优先级的，并且如果总通知数太多，可能会完全抑制它们的发送。实际的限制数量是动态变化的，可能因情况不同而变化，但是尽量不要每个小时发送多个通知)</p>
+		<p>The sending of a silent notification requires a special configuration of the notification’s payload. If your payload is not configured properly, the notification might be displayed to the user instead of being delivered to your app in the background. In your payload, make sure the following conditions are true: (静默通知的发送，需要对通知的payload进行特殊的配置。如果没有配置好，这个通知可能会呈现给用户而不是在后台传递给你的app，保证以下条件是成立的：)</p>
+		<ul>
+			<li>The payload’s aps dictionary must include the content-available key with a value of 1. (aps中必须包含"content-available"键,而且其值是1)</li>
+			<li>The payload’s aps dictionary must not contain the alert, sound, or badge keys. (aps字典不能包含"alert","sound","badge"键)</li>
+		</ul>
+		<p>When a silent notification is delivered to the user’s device, iOS wakes up your app in the background and gives it up to 30 seconds to run. In iOS, the system delivers silent notifications by calling the application:didReceiveRemoteNotification:fetchCompletionHandler: method of your app delegate. Use that method to initiate any download operations needed to fetch new data. Processing remote notifications in the background requires that you add the appropriate background modes to your app.(当用户设备收到一个静默通知时，iOS会在后台唤醒你的app，并给它30秒的时间运行。在iOS中，系统调用app delegate的application:didReceiveRemoteNotification:fetchCompletionHandler:方法来发送静默通知，在这个方法中初始化任何获取数据需要的下载操作。在后台处理远程通知需要你添加合适的后台模式给你的app)</p>
+		<h3>To configure your app to process silent notifications in the background(配置app在后台处理静默通知)</h3>
+		<ol>
+			<li>In the Project Navigator, select your project. </li>
+			<li>In the editor, select your iOS app target.</li>
+			<li>Select the Capabilities tab. </li>
+			<li>Enable the Background Modes capability.</li>
+			<li>Enable the Remote notifications background mode.</li>
+		</ol>
+		<pre>
+			<code>
+
+
+{<br>
+	"aps" : {<br>
+		"content-available" : 1<br>
+	},<br>
+	"acme1" : "bar",<br>
+	"acme2" : 42<br>
+}<br>
+			</code>
+		</pre>
+		<h3>Assigning Custom Actions to a Remote Notification(给远程通知添加自定义动作按钮)</h3>
+		<p>To display custom actions with a remote notification, include the category key in the aps dictionary of the notification’s payload. At launch time, apps can register categories that include custom actions. When a notification includes the category key, the system displays the actions for that category as buttons in the banner or alert interface. When the user selects a button, the system notifies your app so that it can perform any associated tasks. Notifications configured with a category must also be configured to display an alert.(要给远程通知添加自定义动作按钮，在aps字典中包含"category"键，系统会在横幅或提醒界面把那种类别的通知包含的动作展示为按钮。当用户选择一个动作按钮时，系统会通知你的app以便app能执行相关的任务。配置了"category"键的通知也可以配置来展示alert)</p>
+		<pre><code>
+{<br>
+			 "aps" : {<br>
+					"category" : "NEW_MESSAGE_CATEGORY"<br>
+					"alert" : {<br>
+						 "body" : "Acme message received from Johnny Appleseed",<br>
+					},<br>
+					"badge" : 3,<br>
+					"sound" : “chime.aiff"<br>
+			 },<br>
+			 "acme-account" : "jane.appleseed@apple.com",<br>
+			 "acme-message" : "message123456"<br>
+}<br>
+		</code></pre>
+		<h3>Localizing the Content of Your Remote Notifications(本地化远程通知的内容)</h3>
+		<h4>There are two ways to localize the content of remote notifications: (有两种方式来本地话远程通知的内容：)</h4>
+		<ul>
+			<li>Provide localized content from your provider server. (让你的服务器提供本地话内容)</li>
+			<li>Store localized message strings in your app bundle.(把本地话消息字符串存在你的app bundle中)</li>
+		</ul>
+		<p>Both localization approaches have advantages and disadvantages and you should choose the technique that best fits your needs. Providing localized content from your server lets you specify any text you want, but it also requires discovering and tracking the user’s current language preference and potentially translating content dynamically. Storing localized strings in your app bundle is simpler, but requires that you define all of your notification messages in advance and include them in your app’s Localizable.strings resource files.(两种本地化方法各有优劣势，你应该根据需要选择最适合你的技术。让服务器提供本地化内容，可以让你指定需要的文本，但是还需要发现和追踪用户的当前语言设置并动态地进行翻译。而把本地话字符串存储在app bundle中则更简单，但是需要你提前定义你所有的通知消息，并把它们包含在app的Localizable.strings文件中)
+</p>
+<h3>Supplying the User’s Language Preference to Your Server(把用户的语言偏好设置提交给你们的服务器)</h3>
+<p>If your provider server handles the localization of notification messages, your app should communicate the user’s language preference to that server. Users set language preferences locally on the device, and apps can retrieve these preferences using the preferredLanguages property of NSLocale. (如果你们的服务器处理通知消息的本地化，你们的app应该把用户的语言偏好设置提交给服务器。用户可以在设备上设置语言偏好，并且app可以通过NSLocale对象的preferredLanguages属性获取到该设置)</p>
+<p>The example fetches the user’s first preferred language and encodes it as a UTF8 string. It then sends that string to its provider using a custom method. You might also consider sending the first few languages from the preferredLanguages property in case the user’s first language is not one that you support. If you do not support any of the user’s preferred languages, consider using a widely spoken language such as English or Spanish as a fallback.(下面的这个例子获取用户的第一篇好语言，并对它进行UTF8编码之后，提交给服务器。你也可以考虑把preferredLanguages中的前几种语言发送给服务器，以防第一种语言你的app不支持。如果你不支持用户所有的偏好语言，那就考虑用一种大众化语言比如英语或西班牙语最为备用。)
+</p>
+<pre><code>
+NSString *preferredLang = [[NSLocale preferredLanguages] objectAtIndex:0];<br>
+const char *langStr = [preferredLang UTF8String];<br>
+[self sendProviderCurrentLanguage:langStr]; // custom method<br>
+}<br>
+</code></pre>
+<p>Because users can change their preferred language settings, apps should observe the NSCurrentLocaleDidChangeNotification notification. Use that notification to send any language-related changes to your server.(由于用户可以改变它们的语言偏好设置，所以app应该监控NSCurrentLocaleDidChangeNotification通知。用这个通知来发送语言相关的改变给你的服务器)</p>
+<h3>Storing Localized Content in Your App Bundle(在app bundle中存储本地化内容)</h3>
+<p>If you use a consistent set of messages for your notifications, you can store localized versions of the message text in your app bundle and use the loc-key and loc-args keys in your payload to specify which message to display. The loc-key and loc-args keys define the message content of the notification. When present, the local system searches the app’s Localizable.strings files for a key string matching the value in loc-key. It then uses the corresponding value from the strings file as the basis for the message text, replacing any placeholder values with the strings specified by the loc-args key. (You can also specify a title string for the notification using the title-loc-key and title-loc-args keys.)(如果你用和你通知一致的消息集，可以把消息的本地化版本存储在app bundle中，并可以用payload中的"loc-key"和"loc-args"键来指定你想展示哪个消息。当要展示的时候，本地系统会在app的Localizable.strings文件中查找"loc-key"对应的值。然后用该值作为消息文本的基础，用"loc-args"键指定的值来替换该基础文本中的一些占位符，你也可以用"title-loc-key"和"title-loc-args"键来指定通知的标题)</p>
+<p>To illustrate how to use these keys, consider an example of a game app whose provider server sends notifications when a user is invited to play the game. Because the invitation text never changes, that text is included in the app’s Localizable.strings files using the following entry: (为了描述如何使用这些键，考虑一个游戏app的例子，当一个用被邀请来一起玩的时候，该app的服务器会发送通知给该用户。由于邀请文本用不改变，这个文本将包含在app的Localizable.strings文件中，对应如下这个条目：)</p>
+<pre><code>
+"GAME_PLAY_REQUEST_FORMAT" = "%@ and %@ have invited you to play Monopoly";
+</code></pre>
+<p>When the provider server wants to send a notification about a game request, it builds the payload using the loc-key and loc-args keys. It sets the value of loc-key to the string GAME_PLAY_REQUEST_FORMAT and sets the value of loc-args to the names of the participants initiating the game play request. For example, if two users named Jenna and Frank initiated the request, the provider server would send a payload with the following contents: (当你的服务器想发送一个游戏邀请的通知时，它用"loc-key"和"loc-args"键创建payload。它把前一个键的值设置为"GAME_PLAY_REQUEST_FORMAT"，后一个键的值设置为发起游戏邀请的游戏参与者的名字。)</p>
+<pre><code>
+{<br>
+	"aps" : {<br>
+		"alert" : {<br>
+			"loc-key" : "GAME_PLAY_REQUEST_FORMAT",<br>
+			"loc-args" : [ "Jenna", "Frank"]<br>
+		}<br>
+	}<br>
+}<br>
+</code></pre>
+<p>Upon receiving the remote notification with the preceding payload, the device fetches the GAME_PLAY_REQUEST_FORMAT string from the appropriate Localizable.strings file of the app and incorporates the provided player names. For a user whose preferred language is English, the resulting message string becomes “Jenna and Frank have invited you to play Monopoly.” For other languages, the string would be an appropriately translated version of the message that incorporates the provided names. (在收到payload为上面格式的远程通知时，设备从合适的Localizable.strings文件中获取到GAME_PLAY_REQUEST_FORMAT字符串，并引入payload中提供的游戏玩家的名字。对于偏好语言为英语的用户来说，该消息就成为："Jenna and Frank have invited you to play Monopoly."，对于其他语言也都会有合适的版本。)</p>
+<p>When crafting message strings for your Localizable.strings file, you can use the same format specifiers that you use for any localized content. For example, you can use positional specifiers of the form %n$@ to allow for the rearranging of parameters and you can use the %% specifier to create a percent sign character. (当在你的Localizable.strings文件中手动创建消息字符串时，你可以用和其他本地化内容一样的说明符。例如，你可以用位置说明符："%n$@"来允许参数重排，你也可以用说明符："%%"来创建一个百分号字符)</p>
+
+	</body>
+</html>

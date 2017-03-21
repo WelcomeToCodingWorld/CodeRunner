@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<h2>Adaptive Interface</h2>
+		<p>
+			<ul><li>The presentation phase involves moving the new view controller onscreen through a series of transition animations. (呈现阶段：把新的viewcontroller通过一系列专场动画移到屏幕上)</li>
+			<li>The management phase involves responding to environment changes (such as device rotations) while the new view controller is onscreen.（管理阶段：当环境变化时，比如当设备旋转时，这个新的viewcontroller要做出相应的响应。）</li>
+			<li>The dismissal phase involves moving the new view controller off screen through a series of transition animations （消失阶段：用一些列的专场动画把view controller从屏幕上移走）</li>
+			</ul>
+		</p>
+		<p>A UIPresentationController object provides advanced view and transition management for presented view controllers. From the time a view controller is presented until the time it is dismissed, UIKit uses a presentation controller to manage various aspects of the presentation process for that view controller. The presentation controller can add its own animations on top of those provided by animator objects, it can respond to size changes, and it can manage other aspects of how the view controller is presented onscreen. </p>
+		<p>一个UIPresentationController对象为呈现的view controllers提供了高级的视图和转场管理。从一个view controller出现到它消失，UIKit用presentaiton controller来管理这一呈现过程的多个方面。presentation controller能在有动画对象提供的动画之上加入它自己的动画，它可以响应size变化，并可以管理view controller如何呈现在屏幕上的其他方面</p>
+		<p>When you present a view controller using the present(_:animated:completion:) method, UIKit always manages the presentation process. Part of that process involves creating the presentation controller that is appropriate for the given presentation style. For the built-in styles (such as the pageSheet style), UIKit defines and creates the needed presentation controller object. The only time your app can provide a custom presentation controller is when you set the modalPresentationStyle property of your view controller custom. You might provide a custom presentation controller when you want to add a shadow view or decoration views underneath the view controller being presented or when you want to modify the presentation behavior in other ways. </p>
+		<p>当你展示一个view controller的时候，UIKit会管理这一呈现的过程。这一过程还涉及到创建一个适合当前呈现样式的presentation controller，UIkit会定义并创建这一对象。</p>
+		<p>The presentation controller’s role during all of these phases is to manage its own custom views and state information. During the presentation and dismissal phases, the presentation controller adds its custom views (if any) to the view hierarchy and creates any appropriate transition animations for those views. The animation of the view controller’s view onto the screen is still managed by an animator object—that is, an object that adopts the UIViewControllerAnimatedTransitioning protocol. UIKit calls separate presentation controller methods at the beginning and end of the presentation and dismissal phases so that the presentation controller can perform any needed cleanup.(在这三个阶段中presentation controller的作用是管理它自己的自定义views和状态信息。在presentation和dismissal阶段，presentation controller在视图层加入它自己的自定义view，并为这些views创建合适的转场动画。view controller的view呈现在屏幕上的动画仍由遵守UIViewCotrollerAnimatedTransitioning协议的animator 对象管理。在presentation和dismissal阶段的开始和结束时，UIkit会调用presentation controller的不同方法，以便presentation controller能执行一些必要的清理工作)</p>
+		<p>After notifying your presentation controller of an impending size change, UIKit begins the normal view layout process. Apps that use auto layout should not need to do anything because the auto layout mechanism resizes views as needed. But if a custom presentation controller needs to make layout-specific changes, it can do so in its containerViewWillLayoutSubviews() and containerViewDidLayoutSubviews() methods.These methods are equivalent to the viewWillLayoutSubviews() and viewDidLayoutSubviews() methods of the UIViewController class and used in the same way. UIKit calls them before and after it calls the layoutSubviews() methods of the views in the view hierarchy.
+</p>
+<p>UIKit会在调用layoutSubviews()方法之前调用viewWillLayoutSubviews()方法，在之后调用viewDidLayoutSubviews()方法</p>
+<p>The animator object returned by this method is responsible for executing the animations. The interactive animator object manages only the timing of the animation, not the animations themselves. </p>
+<p>执行动画师animator对象的职责，而interactive animator对象只管理动画的时间，而不管理动画本身</p>
+<p>View controllers are responsible for the presentation of their views and for adapting that presentation to match the underlying environment. Every iOS app should be able to run on iPad and on several different sizes of iPhone. Rather than provide different view controllers and view hierarchies for each device, it is simpler to use a single view controller that adapts its views to the changing space requirements.</p>
+<p>view controllers 有责任展示它们的views，并能调整展示以适应其所基于的环境的变化。每个iOS app应该能够在几种不同尺寸的iPhone，以及iPad上运行。用一个view controller就能满足变化的空间需求，而不是为不同尺寸的设备提供不同的view controller</p>
+<p>
+In iOS, view controllers need to handle coarse-grained changes and fine-grained changes. Coarse-grained changes happen when a view controller’s traits change. Traits are attributes that describe the overall environment, such as the display scale. Two of the most important traits are the view controller’s horizontal and vertical size classes, which indicate how much space the view controller has in the given dimension. You can use size class changes to change the way you lay out your views, as shown in Figure 1-4. When the horizontal size class is regular, the view controller takes advantage of the extra horizontal space to arrange its content. When the horizontal size class is compact, the view controller arranges its content vertically.
+</p>
+<p>在iOS上，view controllers需要处理比较大的变化，也要处理细微的变化。view controller的traits的改变就属于粗略变化。</p>
+
+<p>An adaptive interface is one that makes the best use of the available space. Being adaptive means being able to adjust your content so that it fits well on any iOS device. The adaptive model in iOS supports simple but dynamic ways to rearrange and resize your content in response to changes. When you take advantage of this model, a single app can adapt to dramatically different screen sizes (as illustrated in Figure 12-1) with very little extra code.(一个适应性强等界面能充分利用可用的空间。iOS上的adaptive模型提供了一种简单但动态的方式来重新调整内容的大小或位置来适应环境的变化，当你能够利用这一模型的时候，一个简单的app也能适应不同size的屏幕)
+</p>
+
+<p>An important tool for building adaptive interfaces is Auto Layout. Using Auto Layout, you define rules (known as constraints) that govern the layout of your view controller’s views. You can create these rules visually in Interface Builder or programmatically in your code. When the size of a parent view changes, iOS automatically resizes and repositions the rest of your views according to the constraints you specified. (Auto Layout是构建一个适应性强等界面的重要工具。用Auto Layout，你可以自己指定规则或约束来掌控你view controller的views。既可以通过代码也可以通过在IB上可视化创建这些约束。当父View的Size改变的时候，iOS会根据你指定的约束自动resize和reposition你其余的Views)</p>
+<p>Traits are another important component of the adaptive model. Traits describe the environment in which your view controllers and views must operate. Traits help you make high-level decisions about your interface.(Traits是adaptive模型的另一重要组件。Traits描述了你的views和view controllers必须运行的环境。Traits帮助你做关于你的界面的high-level decisions)</p>
+<p>When constraints alone are not enough to manage layout, your view controllers have several opportunities to make changes. View controllers, views, and a few other objects manage a collection of traits that specify the current environment associated with that object. Table 12-1 describes the traits and how you use them to affect your user interface.(当光有约束不足以管理布局的时候，你的view controllers有机会做一些改变。view controllers，views以及一些其他Object管理了一个指定了与该object相关的当前环境的Traits集，如verticalSizeClass，displayScale，userInterfaceIdiom)
+</p>
+<p>Use traits to make decisions about how to present your user interface. When building your interface in Interface Builder, use traits to change the views and images that you display or use them to apply different sets of constraints. Many UIKit classes, like UIImageAsset, tailor the information they provide using the traits you specify. (用traits来决定如何呈现你的界面，当在IB上设计界面时，用改变你所展示的views和images，或者用它们来运用不同的约束集。许多UIKit的类，像UIImageAsset，通过你指定的traits来定制它们提供的信息)</p>
+<p><ul><li>
+Use size classes to make coarse changes to your interface. Size class changes are an appropriate time to add or remove views, add or remove child view controllers, or change your layout constraints. You can also do nothing and let your interface adapt automatically using its existing layout constraints.(用size classes来处理界面的粗略变化。在Size Classes改变时，添加或移除view，添加或移除view controller，或者改变布局约束是个合适的时机。也可以什么都不做，让你的界面用当前的约束自适应界面)	
+</li>
+<li>Never assume that a size class corresponds to the specific width or height of a view. Your view controllers’ size classes can change for many reasons. For example, a container view controller on iPhone might make one of its children horizontally regular to force it to display its contents differently. (永远不要认为把一个size Class和一个view的特定高宽联系起来，你的view controller的size class可能会由于多种原因而改变，例如，iPhone上的一个container view controller可能让它的一个child view controllers水平regular来强制让它用不同的方式展示它的内容。)</li>
+<li>Use Interface Builder to specify different layout constraints for each size class, as appropriate. Using Interface Builder to specify constraints is much simpler than adding and removing constraints yourself. View controllers automatically handle size class changes by applying the appropriate constraints from their storyboard. For information about configuring layout constraints for different size classes, see Configuring Your Storyboard to Handle Different Size Classes. (用IB来为每个size class指定特定不同的布局约束。这比你自己adding和removing约束要简单的多。View controllers从stroyboard通过合适的约束来自动处理size class多变化。)</li>
+<li>Avoid using idiom information to make decisions about the layout or content of your interface. Apps running on iPad and iPhone should generally display the same information and should use size classes to make layout decisions.(避免避免用idiom信息作为布局或界面内容展示的依据。同一app在iPad和iPhone上应该展示相同的信息，应该用size class来做布局依据)</li>
+</ul> </p>
+
+<p>Starting in iOS 9, you can use this class to check whether the device on which your app is running supports 3D Touch. Read the value of the forceTouchCapability property on the trait collection for any object in your app with a trait environment. For information about trait environments, see UITraitEnvironment. For the possible values of the force touch capability property, see the UIForceTouchCapability enumeration.(从iOS9开始，你可以用UITraitCollection这个类，通过你app的任何一个对象的trait collection中的forceTouchCapability属性值来检查你app所运行的设备是否支持3D Touch。)</p>
+
+
+		
+	</body>
+</html>

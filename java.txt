@@ -1,0 +1,8 @@
+servlet是一个早期的不完善的产品，写business layer很好，写presentation layer 很臭，并且两层混杂。
+所以推出JSP + BEAN,用JSP写presentation layer，用bean写business layer。类似于ASP + COM/DCOM。
+可是，这不是说，学了servlet没用，实际上，你应该从servlet入门，再上JSP,再上JSP + BEAN。
+需要强调的是，学了JSP,不会用Java BEAN并进行整合，等于没学。因此要多花点儿力气在JSP +BEAN上。
+我们可以看到，当ASP + COM和JSP + BEAN都采用组件技术后，所有的组件都是先进行编译，并驻留内存，然后快速执行。所以大家常吹的Servlet／JSP 先编译驻留内存后快速执行的优势就没有了。
+
+
+java虚拟机执行字节码文件（.class）

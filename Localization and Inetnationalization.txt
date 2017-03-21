@@ -1,0 +1,133 @@
+Localization is the process of translating your app into multiple languages. But before you can localize your app, you internationalize it. Internationalization is the process of making your app able to adapt to different languages, regions, and cultures. Because a single language can be used in multiple parts of the world, your app should adapt to the regional and cultural conventions of where a person resides. An internationalized app appears as if it is a native app in all the languages and regions it supports.
+
+本地化就是把你的app翻译成多种语言的版本。
+但是在本地化之前应该先国际化。国际化就是让你的app能适应不同语言，区域，文化的过程，因为就算是同一种语言也会随地域等不同有不同的文化习惯。一个国际化的app对于它所支持的所有语言，都像是一个本地app一样。
+
+The App Store is available in over 150 different countries, and internationalizing your app is the first step to reach this global market. Using iTunes Connect, you specify whether your app is available in all territories or specific territories. Then you customize your app for each target market that you want to support. Users in other countries want to use your app in a language they understand and see dates, times, and numbers in familiar, regional formats.
+
+App Store目前支持超过150个国家，让你的app国际化是占领这个全球市场的第一步。用iTunes连接，你可以指定你的app是否支持所有的区域或某个特定的区域。然后，你可以为每一个你想支持的目标市场定制你的app。其他国家的用户希望你的app支持它们所能理解的语言，看到它们所熟悉的格式的日期、数字、时间、地区等。
+
+Xcode supports incremental localization of your project. First you internationalize your user interface and code during development. Then you test your app using pseudolocalizations and different region settings. When you are ready to localize your app, you export the localizable text using standard file formats and submit them to a localization team for translation into multiple languages. While you are waiting for these translations, you can continue developing your app and perform additional localization steps yourself—perhaps add language-specific audio and image files to your project. Then import the localizations into your project and thoroughly test your app in each supported language and region. During the next iteration of your app, you only translate changes and add additional languages.
+
+Xcode支持让你项目逐步本地化。首先，你在开发时要国际化你的用户界面和代码。然后用伪定位和不同的区域设置来测试你的app。当你准备好本地化的时候，用标准的文件格式导出本地化文本并把它们提交给本地化团队来翻译成多种不同的语言。在你等他们翻译的过程中，你可以继续开发你的app并且你自已做一些其他的本地化工作，比如准备你项目中特定语言的音频和图片文件。然后把本地化文件导入你的项目，彻底地测试一遍它所支持的语言和区域。在下次迭代你的app时，你只需要改变的东西或者增加其他语言的支持。
+
+Prepare your app for localization by separating language and locale differences from the rest of your user interface and code.
+
+通过把语言和区域差异与其他的用户界面和代码分开，为app本地话作准备。
+
+Use base internationalization to separate user-facing text from your .storyboard and .xib files.
+用base internationalization把面向用户的文本与.storyboard和.xib文件分开。
+
+
+In Interface Builder, use Auto Layout so views adjust to the localized text.
+在IB上，用Auto Layout让视图来适应本地话的文本
+Separate other user-facing text from your code.
+把其他面向用户的文本和你的代码分开
+Use standard APIs to handle the complexity of different writing systems and locale formats.
+用标准API来处理不同写入系统和区域格式的复杂性
+Adhere to the user’s settings when formatting, sorting, searching, and parsing data.
+在格式化、排序、搜索、解析数据时遵循用户的设置
+If the app supports right-to-left languages, mirror the user interface and change the text direction as needed.
+如果app支持从右到左的语言，镜像用户界面，并且如果有必要，改变文本方向
+
+
+Export and import the localizations using standard file formats.
+用标准文件格式导出并导入本地化文件
+
+
+Lock views in the user interface.
+锁定用户界面的视图
+Export the localizations.
+导出本地化文件
+Submit the exported files to translators.
+把导出的本地化文件提交给翻译
+Import the localization files and confirm the changes.
+导入本地化文件病确认改变 Perform additional localization steps yourself.
+自己完成其他的本地化工作
+
+
+Test your internationalized app, using a variety of techniques, during development and after localization.
+在开发期间和本地化之后用多种不同的技术测试你国际化的app
+
+
+Before you localize your app:
+本地化之前：
+
+In Interface Builder, preview the user interface using pseudolanguages.
+在IB上，用伪语言预览用户界面
+Run the app using different pseudolanguages.
+用不同语言运行你的app
+
+After you import localizations:
+导入本地化文件之后：
+
+In Interface Builder, preview the localizations.
+在IB上预览本地化
+Run the app with options that detect non-localized text.
+用检测非本地化文本的选项运行你的app
+Run the app using all supported languages and regions.
+用支持的全部语言分别运行你的app
+Ask native-language speakers to test the app.
+分别让不同语言的本地人测试你的app
+
+
+Xcode provides several technologies to help you develop an internationalized app. Xcode separates user-facing text from your views and layout so user-facing text can be easily translated independent of your Xcode project. Xcode also provides tools to maintain this separation when you change the user interface. In addition, you may have different sets of other types of resource files for each language you support.
+Xcode提供了几种帮助你开发国际化app的技术。它把面向用户的文本与用户界面的视图和布局分开，这样就使得独立于你的项目翻译面向用户的文本边的很容易。Xcode也提供了当你改变用户界面时维持这种分离的工具 。此外，你也可以针对不同的语言，设置不同的其他类型的源文件集。
+
+Base internationalization separates user-facing strings from .storyboard and .xib files. It relieves localizers of the need to modify .storyboard and .xib files in Interface Builder. Instead, an app has just one set of .storyboard and .xib files where strings are in the development language—the language that you used to create the .storyboard and .xib files. These .storyboard and .xib files are called the base internationalization. When you export localizations, the development language strings are the source that is translated into multiple languages. When you import localizations, Xcode generates language-specific strings files for each .storyboard and .xib file. The strings files don’t appear in the project navigator until you import localizations or add languages.
+
+可以用base internationalization把面向用户的字符串鱼.storyboard和.xib文件分离，这就减轻了本地化程序在IB上改变.storyboard和.xib文件的需要，一个app只需要有一套用开发语言创建的.storyboard和.xib文件，这套文件就叫base internationalization。当你导出本地化文件时，开发语言字符串就是要翻译为不同语言的原始字符串。当你倒入本地化文件时，Xcode为每一个.storyboard和.xib文件创建特定语言的字符串文件。只有你导入本地化文件或者添加语言支持时，字符串文件才会出现在项目导航区。
+
+In Xcode 5 and later, base internationalization is enabled by default. If you have an older project, enable base internationalization before continuing, as described in Enabling Base Internationalization.
+在Xcode5和之后的版本中，base internationalization默认可用。如果你的项目是用更老版本的Xcode创建的，那么在继续之前先启用base internationalization。
+
+In the project navigator, select the project (not a target) and click Info.
+在项目导航区，选择项目而不是target，点击info
+If necessary, click the disclosure triangle next to Localizations to reveal the settings.
+如有必要，点击挨着Localizations项的下拉三角来展示设置。
+If necessary, select the Use Base Internationalization checkbox.
+如有必要，选中Use Base Internationalization单选框
+In the dialog that appears, specify the development language for your .storyboard and .xib files.
+在出现的对话框中，为.storyboar和.xib文件指定开发语言
+
+Xcode modifies your project folder according to the selections you make in this dialog. Xcode creates a Base.lproj folder in your project folder and adds to it the resource files you select. Xcode creates a language folder for the development language but only adds resources that need translation to the folder. For example, if you select English as the development language, Xcode inserts the resource file in the Base.lproj project folder but not the en.lproj folder because the resource is already in English.
+Xcode会根据你在上面那个对话框中的选择改变你项目的目录。它创建一个Base.lproj目录，并把你选择的源文件放在该目录下。Xcode为开发语言创建一个语言目录，但是只把需要翻译的资源放在该目录下。例如，如果你选择英语作为开发语言，Xcode就会把相应的源文件放在Base.lproj目录下，但不会放在en.lproj目录下，因为这些资源已经是英文的了。
+
+If no resources appear in the dialog, add your .storyboard and .xib files to a language, as described in Adding Languages, and repeat these steps.
+如果没有资源出现在该对话框下，添加某个语言的.storyboard和.xib文件。然后重复这些动作。
+
+In addition to internationalizing your user interface, write code that handles text in multiple languages. First store international text in strings files similar to the strings files used by base internationalization in Internationalizing the User Interface. Also use language and locale-sensitive APIs for enumerating, searching, and sorting text in your code. Use standard text views for displaying and parsing text input as well. Let these APIs handle the complexity of different writing and input systems for you.
+除了国际化你的用户界面，写能够用多种语言处理文本的代码。首先把国际化文本存储为像在国际化用户界面中用到的strings文件一样的strings文件。用语言和区域敏感的API来枚举、搜索、排序你代码中的文本。用标准的文本视图来展示和解析输入的文本。让这些API来处理不同的写入系统和输入系统的复杂性。
+
+Separating User-Facing Text from Your Code
+把面向用户的文本与你的代码分离开来
+
+All user-facing text supplied by your app programmatically needs to be localized—that is, user-facing text that is not contained in .storyboard or .xib files, such as error messages, needs to be translated into the current language before it’s presented to the user. iOS and OS X provide a mechanism to retrieve localized text from strings files at runtime. In your code, replace strings containing user-facing text with the return value of an NSLocalizedString macro. When you export localizations, Xcode searches your code for the macros and includes the strings files in the exported localization file for translation. When you import localizations, Xcode adds the strings files, used by your code, to your Xcode project. 
+
+你的app以程序的方式提供的所有面向用户的文本都需要本地化。这里的文本不包含.storyboard和.xib文件中的文本。例如，错误信息等。iOS和macOS提供了一种在运行时从strings文件中获取本地化文本的机制。在你的代码中，把包含面向用户界面的文本的字符串替换为NSLocalizedString宏的返回值。当你导出本地化文件时，Xcode会搜索你代码中的该宏并在导出的本地化文件中包含该字符串文件以供翻译，当你导入本地化文件时，Xcode会把你的代码使用的字符串文件加入你的Xcode项目中。
+NSLocalizedString(@"RunningDistance", @"distance for a marathon"),
+
+where @"RunningDistance" is the key for text that is retrieved from a localized strings file. The @"distance for a marathon" parameter is a comment about the key-value pair stored in the strings file as a hint to localizers.If you want different behavior, use one of the other NSLocalizedString macros that take more parameters, described in Foundation Functions Reference.
+这里@"RunningDistance"是从localized strings file中获取该文本时用的键。@"distance for a marathon"是存储在stings file文件中的键值对的注释。如果想用不同的行为，用带有更多参数的其他宏。
+
+Don’t put numbers in localizable strings because different regions can use different numbers.
+不要把数字放在localizable strings中，因为不同的区域可能用不同的数字。
+
+You don’t need to store all your key-value pairs in the same strings files. You can use other NSLocalizedString macros to create separate strings files and optionally, store them in different bundles.
+你没必要把所有的键值对都存储在同一个文件中，你可以用NSLocalizedString宏来创建单独的strings files，并把它们存储在不同的bundle中。
+
+To retrieve a localized string from a strings file, rather than adding it to a strings file, use the localizedStringForKey:value:table: method in the NSBundle class. When the strings file corresponding to the specified table is not in your project, the NSLocalizedString macros and the localizedStringForKey:value:table: method return the value parameter as the localized string.
+如果是这样，要从一个strings file中获取一个本地化的字符串，而不是把它加进一个strings file中就用NSBundle类的localizedStringForKey:value:table:方法，如果和指定table相关的strings file不在你的项目里，NSLocalizedString宏和localizedStringForKey:value:table:方法会返回value参数 
+
+Later, when you import localizations, as described in Importing Localizations, the localized strings files are added to your project. (Alternatively, you can generate the development language strings files from NSLocalizedString macros directly, as described in Creating Strings Files for User-Facing Text in Your Code.)
+之后，当你导入本地化文件时，localized strings files会被加进你的项目里。当然，你也可以直接从NSLocalizedString宏产生开发语言的strings file。
+
+When you import localizations, Xcode adds the language and a set of localized strings files for the language to the project. For example, if you import ru.xliff in the standard XML Localization Interchange File Format (XLIFF) that includes the target language attribute, the Russian language is added to the project. The first time you import localizations, the base internationalization files change to a group containing the strings files in the project navigator. Xcode stores the language-specific strings files in language folders. For example, Xcode creates a ru.lproj folder in the project folder and adds a localized copy of the Localizable.strings and InfoPlist.strings files to the ru.lproj folder. The localized strings files are extracted from the corresponding [Language ID].xliff file. The next time you import localizations, the strings files are merged with your existing project files.
+当你导入本地化文件时，Xcode会增加一种语言，以及一组相关的localized strings files到你的项目。例如，如果你导入包含目标语言特性的ru.xliff文件，俄语就会加入到你的项目中。你第一次导入本地化文件时，base internationalization files就变成了包含项目导航区中strings files的一个组。例如，Xcode 会在项目目录下创建ru.lproj目录，并把Localizable.strings and InfoPlist.strings files地拷贝加到该目录下。Localizable.strings文件是从相应的[Language ID].xliff文件中提取出来的。你下次再导入本地化文件时，strings files就会和已经存在的项目文件合并。
+
+
+
+
+
+
+

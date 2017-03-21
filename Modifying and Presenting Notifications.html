@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Modifying and Presenting Notifications</title>
+	</head>
+	<body>
+		<h3>Modifying and Presenting Notifications(改变和展示通知)</h3>
+		<p>You can modify the content or presentation of arriving notifications using app extensions. To modify the content of a remote notification before it is delivered, use a notification service app extension. To change how the notification’s content is presented onscreen, use a notification content app extension.(你可以用app的扩展改变即将收到的通知的内容或展示，为了在通知发送之前改变其内容，用通知服务app扩展。要改变通知的内容呈现在屏幕上的方式，用通知内容app扩展)</p>
+		<h3>Modifying the Payload of a Remote Notification(改变远程通知的payload)</h3>
+		<p>Use a notification service app extension to modify the payload of a remote notification before it is delivered to the user. Remote notifications originate from a server, which has control over the configuration and contents of the notification. A service extension lets your app make changes to the server-provided payload data before that data is presented to the user. You use service extensions to implement the following types of behaviors: (用通知服务app扩展，在通知发送给用户之前改变其payload。远程通知是从能够控制通知的配置和内容的服务器上发起的。一个服务扩展可以让你的app在服务器提供的数据呈现给用户之前对其进行更改，用服务扩展可以实现下面类型的行为：)</p>
+		<ul><li>
+			Decrypt data that was delivered in an encrypted format. (解密用加密方式传送的数据)
+		</li>
+		<li>Download images or other media files and add them as attachments to the notification. (下载图片或其他的媒体文件并把它们作为附件加到通知中)</li>
+		<li>Change the body or title text of the notification.(改变通知的body或title)</li>
+		<li>Add a thread identifier to the notification or modify the contents of the notification’s userInfo dictionary.(给通知加一个线程标识或改变通知的userInfo字典的内容)</li>
+		</ul>
+		<h3>To add a notification service app extension to your iOS app</h3>
+		<ol>
+			<li>n Xcode, select New > Target to add a new target to your project.</li>
+			<li>In the iOS > Application Extension section, select the Notification Service Extension target.</li>
+			<li>Click Next. </li>
+			<li>Specify the name and other details for your app extension. </li>
+			<li>Click Finish</li>
+		</ol>
+<p>The default notification service extension target provided by Xcode contains a subclass of the UNNotificationServiceExtension class for you to modify. Use the didReceiveNotificationRequest:withContentHandler: method to create and configure a new UNMutableNotificationContent object. You can make any changes you want to the new content object, replacing some or all of the original content values. When you are done, call the provided completion handler with your new content object. The system integrates your new content into the notification and delivers it to the user.(Xcode提供的默认的notification service extension target包含一个UNNotificationServiceExtension类的子类，你可以更改它。用didReceiveNotificationRequest:withContentHandler:方法创建并配置一个新的UNMutableNotificationContent对象，可以对这个新content对象做任何你想做的更改，替换部分或全部content的初始值。完成这些之后，调用这个新对象提供的回调。系统会把你的新content对象整合进通知，并把它发送给用户)</p>
+<p>The system gives you a limited amount of time to modify the notification and call the provided completion handler, so you should perform any tasks quickly. If your didReceiveNotificationRequest:withContentHandler: method takes too long to call the completion handler, the system calls the serviceExtensionTimeWillExpire method to give you one final opportunity to finish your modifications. If you do not call the completion handler in time, the system displays the notification’s original content. (系统给了你有限的时间来改变通知并调用回调，因此你应该快速执行任何任务。如果你的didReceiveNotificationRequest:withContentHandler:方法要用花很长的时间去调用回调，那么系统会调用serviceExtensionTimeWillExpire方法给你最后一次机会来完成改变。如果你没有技师调用回调，系统会展示通知的原始内容)</p>
+<p>Remote notifications sent by your server must be crafted explicitly to support modification by a notification service app extension. Notifications that do not include the proper modifications are delivered directly to the user without modification. When creating the payload for the remote notification, your server should do the following: (你们的服务器发送的远程通知必须显式地构造来支持notification service app extension对通知的改变。没有包含的修饰符的通知将不经改变地直接发送给用户，当在服务器上构造payload时，你们的服务器应该做如下工作：)</p>
+<ul><li>
+	Include the mutable-content key with a value of 1. (包含值为1的mutable-content键)
+</li>
+<li>
+	Include an alert dictionary with subkeys for the title and body of the alert. (包含一个aleret字典，该字典中有title和body键)
+</li>
+</ul>
+<h3>Presenting Notifications Using a Custom Interface on iOS(在iOS中用自定义界面展示通知)</h3>
+<p>Use a notification content app extension to display a custom user interface for your app’s notifications. You use an extension of this type to incorporate custom content or to use a different layout than the default interface. For example, you might use this type of extension to display images or media files inline with your notifications. (用notification content app extension来为你app的通知展示自定义用户界面。用该类型的扩展可以引入自定义的内容或用不同于默认界面的布局。例如，你可以用这类扩展在你的通知中展示图片等多媒体文件)</p>
+<p>A notification content app extension supports the presentation of local and remote notifications associated with a specific category. You specify the category for a local notification using the categoryIdentifier of your UNNotificationContent object. For remote notifications, your server includes a category key with an appropriate value in the aps dictionary of the payload. When a notification with that category arrives, the system loads the view controller from your extension and incorporates your content into the system interfaces. You use the notification contents to configure your view controller before it appears onscreen.(一个notification content app extension类型的扩展支持特定类别的本地和远程通知，你可以用UNNotificationContent的categoryIdentifier属性来指定一个本地通知的类别。对于远程通知，你的服务器在通知payload的aps字典中包含一个有合适的值的category键。当收到那种类别的通知时，系统从你的扩展中加载view controller。你可以在你的view controller出现在屏幕之前用通知内容来配置它)
+</p>
+<p>The initial notification content app extension target is configured to present notifications associated with a single category. You must modify your target to specify which category of notifications you want to support with each extension. You specify the category using the UNNotificationExtensionCategory key in your target’s Info.plist file. Set the value of the key to the same string in the identifier property of the UNNotificationCategory object that your app registers at launch time.(初始的notification content app extension target的配置呈现某一类别的通知。你必须改变你的target来指定你的扩展想支持哪种类别的通知。用你target中Info.plit文件的UNNotificationExtensionCategory键来指定通知的类别。把它的值设置为你的app启动时注册的UNNotificationCategory对象的identifier属性的值)
+</p>
+<h3>To support multiple notification categories with your app extension(让你的扩展支持多种类别的通知)</h3>
+<ol>
+	<li>Select the Info.plist file of your notification content extension project. </li>
+	<li>Expand the NSExtension dictionary to view the extension-related keys.</li>
+	<li>Expand the NSExtensionAttributes dictionary.</li>
+	<li>Change the type of the UNNotificationExtensionCategory key to Array.(把UNNotificationExtensionCategory键的类型改为数组) </li>
+	<li>Add one entry for notification category that the extension handles. </li>
+	
+</ol>
+<p>You may include multiple notification content app extensions in your iOS app bundle. The system expects only one extension to support a given category, so you must configure the UNNotificationExtensionCategory key of each extension with a different set of values. (你可以在你的iOS app bundle中包含多个notification content app extensions类型的扩展，因此你必须配置每一个扩展的UNNotificationExtensionCategory键为不同的值)</p>
+<h3>Presenting Notifications Using a Custom Interface on watchOS（在watchOS上用自定义界面展示通知）</h3>
+<p>The WatchKit framework provides direct support for presenting notifications using a custom interface. A WatchKit extension may include one or more notification interface controllers to display when notifications arrive for your app. You use these interface controllers to present the content of your notifications.(WatchKit框架提供了直接支持用自定义界面展示通知的方法。一个WatchKit extension可以包含一个或多个通知界面controller来展示收到的通知)</p>
+
+	</body>
+</html>

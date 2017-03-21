@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Swift入门之流程控制(control flow)</title>
+	</head>
+	<body>
+		<h2>简介</h2><br>
+		<p>
+			Swift provides a variety of control flow statements. These include while loops to perform a task multiple times; if, guard, and switch statements to execute different branches of code based on certain conditions; and statements such as break and continue to transfer the flow of execution to another point in your code. (if,guard,switch执行某一个分支)
+		</p>
+		<p>
+			Swift also provides a for-in loop that makes it easy to iterate over arrays, dictionaries, ranges, strings, and other sequences. (for-in循环能够更方便地遍历数组，字典，范围(range)，字符串和其他序列)
+		</p>
+		<p>
+			Swift’s switch statement is also considerably more powerful than its counterpart in many C-like languages. Because the cases of a switch statement do not fall through to the next case in Swift, it avoids common C errors caused by missing break statements. Cases can match many different patterns, including interval matches, tuples, and casts to a specific type. Matched values in a switch case can be bound to temporary constants or variables for use within the case’s body, and complex matching conditions can be expressed with a where clause for each case.（Swift中的Switch比起其他类C语言中的Switch更加强大，因为Swift中的Switch不会一旦匹配一个case之后不会再去匹配下一个Case，这就可以避免了常见的由于忘记写break而造成的C错误），匹配的Case对应的值能够被转化为临时变量或常量，在该case体内使用
+			
+		</p>
+		<h3>For-In Loops(for循环)</h3>
+		
+		<pre><code>
+		<h4>遍历Range</h4>
+for index in 1...5 {
+	print("\(index) times 5 is \(index * 5)")
+}
+// 1 times 5 is 5
+// 2 times 5 is 10
+// 3 times 5 is 15
+// 4 times 5 is 20
+// 5 times 5 is 25
+
+<h4>遍历Array</h4>
+let names = ["Anna", "Alex", "Brian", "Jack"]
+for name in names {
+	print("Hello, \(name)!")
+}
+// Hello, Anna!
+// Hello, Alex!
+// Hello, Brian!
+// Hello, Jack!
+
+<h4>遍历Dictionary</h4>
+let numberOfLegs = ["spider": 8, "ant": 6, "cat": 4]
+for (animalName, legCount) in numberOfLegs {
+	print("\(animalName)s have \(legCount) legs")
+}
+// ants have 6 legs
+// spiders have 8 legs
+// cats have 4 legs
+		</code></pre>
+		<h3>While</h3>
+		<pre><code>
+while condition {
+	statements
+}
+
+
+<h5>Example:</h5>
+let finalSquare = 25
+var board = [Int](repeating: 0, count: finalSquare + 1)
+
+board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+
+
+var square = 0
+var diceRoll = 0
+while square < finalSquare {
+	// roll the dice
+	diceRoll += 1
+	if diceRoll == 7 { diceRoll = 1 }
+	// move by the rolled amount
+	square += diceRoll
+	if square < board.count {
+		// if we're still on the board, move up or down for a snake or a ladder
+		square += board[square]
+	}
+}
+print("Game over!")
+		</code></pre>
+		<h3>Repeat-While(相当于do-while)</h3>
+		<pre><code>
+repeat {
+
+	statements
+
+} while condition
+<h5>Example:</h5>
+et finalSquare = 25
+var board = [Int](repeating: 0, count: finalSquare + 1)
+board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+var square = 0
+var diceRoll = 0
+
+repeat {
+	// move up or down for a snake or ladder
+	square += board[square]
+	// roll the dice
+	diceRoll += 1
+	if diceRoll == 7 { diceRoll = 1 }
+	// move by the rolled amount
+	square += diceRoll
+} while square < finalSquare
+print("Game over!")
+		</code></pre>
+<h3>IF(if就不多讲了，和其他语言差不多，下面给个例子)</h3>
+<pre><code>
+var temperatureInFahrenheit = 30
+temperatureInFahrenheit = 72
+if temperatureInFahrenheit <= 32 {
+	print("It's very cold. Consider wearing a scarf.")
+} else if temperatureInFahrenheit >= 86 {
+	print("It's really warm. Don't forget to wear sunscreen.")
+}
+</code></pre>
+<h3>Switch</h3>
+<pre><code>
+
+
+switch some value to consider {
+
+	case value 1:
+
+		respond to value 1
+
+	case value 2,
+
+		 value 3:
+
+		respond to value 2 or 3
+
+	default:
+
+		otherwise, do something else
+
+}
+
+<h5>Example1:匹配值</h5>
+let someCharacter: Character = "z"
+switch someCharacter {
+case "a":
+	print("The first letter of the alphabet")
+case "z":
+	print("The last letter of the alphabet")
+default:
+	print("Some other character")
+}
+// Prints "The last letter of the alphabet"
+
+<h5>Example2:匹配区间</h5>
+let approximateCount = 62
+let countedThings = "moons orbiting Saturn"
+var naturalCount: String
+switch approximateCount {
+case 0:
+	naturalCount = "no"
+case 1..<5:
+	naturalCount = "a few"
+case 5..<12:
+	naturalCount = "several"
+case 12..<100:
+	naturalCount = "dozens of"
+case 100..<1000:
+	naturalCount = "hundreds of"
+default:
+	naturalCount = "many"
+}
+print("There are \(naturalCount) \(countedThings).")
+// Prints "There are dozens of moons orbiting Saturn."
+
+<h5>匹配元组</h5>
+let somePoint = (1, 1)
+switch somePoint {
+case (0, 0):
+	print("(0, 0) is at the origin")
+case (_, 0):
+	print("(\(somePoint.0), 0) is on the x-axis")
+case (0, _):
+	print("(0, \(somePoint.1)) is on the y-axis")
+case (-2...2, -2...2):
+	print("(\(somePoint.0), \(somePoint.1)) is inside the box")
+default:
+	print("(\(somePoint.0), \(somePoint.1)) is outside of the box")
+}
+// Prints "(1, 1) is inside the box"
+<h5>值绑定</h5>
+let anotherPoint = (2, 0)
+switch anotherPoint {
+case (let x, 0):
+	print("on the x-axis with an x value of \(x)")
+case (0, let y):
+	print("on the y-axis with a y value of \(y)")
+case let (x, y):
+	print("somewhere else at (\(x), \(y))")
+}
+// Prints "on the x-axis with an x value of 2"
+<h5>Where子句(用于检查额外的条件)</h5>
+let yetAnotherPoint = (1, -1)
+switch yetAnotherPoint {
+case let (x, y) where x == y:
+	print("(\(x), \(y)) is on the line x == y")
+case let (x, y) where x == -y:
+	print("(\(x), \(y)) is on the line x == -y")
+case let (x, y):
+	print("(\(x), \(y)) is just some arbitrary point")
+}
+// Prints "(1, -1) is on the line x == -y
+
+<h5>混合(compound)case</h5>
+let someCharacter: Character = "e"
+switch someCharacter {
+case "a", "e", "i", "o", "u":
+	print("\(someCharacter) is a vowel")
+case "b", "c", "d", "f", "g", "h", "j", "k", "l", "m",
+	 "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z":
+	print("\(someCharacter) is a consonant")
+default:
+	print("\(someCharacter) is not a vowel or a consonant")
+}
+// Prints "e is a vowel"
+
+
+//值绑定
+let stillAnotherPoint = (9, 0)
+switch stillAnotherPoint {
+case (let distance, 0), (0, let distance):
+	print("On an axis, \(distance) from the origin")
+default:
+	print("Not on an axis")
+}
+// Prints "On an axis, 9 from the origin"
+</code></pre>
+	<h3>转移控制点</h3>
+	<ul>
+		<li>continue</li>
+		<li>break</li>
+		<li>fallthrough</li>
+		<li>return</li>
+		<li>throw</li>
+	</ul>
+	<p>这里只介绍continue，break，fallthrough，return在函数中介绍过了，throw将在异常处理一节介绍：<br>
+		<pre><code>
+			<h5>Continue(停止当前循环，开始新的循环)</h5>
+let puzzleInput = "great minds think alike"
+var puzzleOutput = ""
+let charactersToRemove: [Character] = ["a", "e", "i", "o", "u", " "]
+for character in puzzleInput.characters {
+	if charactersToRemove.contains(character) {
+		continue
+	} else {
+		puzzleOutput.append(character)
+	}
+}
+print(puzzleOutput)
+// Prints "grtmndsthnklk"
+
+<h5>Break(跳出当前控制)</h5>
+<p>
+Swift in a Loop Statement,Swift in a Switch Statement<br>
+终止当前控制，并将控制转交给该控制流下面的代码
+
+
+
+let numberSymbol: Character = "三"  // Chinese symbol for the number 3
+	var possibleIntegerValue: Int?
+	switch numberSymbol {
+	case "1", "١", "一", "๑":
+		possibleIntegerValue = 1
+	case "2", "٢", "二", "๒":
+		possibleIntegerValue = 2
+	case "3", "٣", "三", "๓":
+		possibleIntegerValue = 3
+	case "4", "٤", "四", "๔":
+		possibleIntegerValue = 4
+	default:
+		break
+	}
+	if let integerValue = possibleIntegerValue {
+		print("The integer value of \(numberSymbol) is \(integerValue).")
+	} else {
+		print("An integer value could not be found for \(numberSymbol).")
+	}
+	// Prints "The integer value of 三 is 3."
+</p>
+<h5>Fallthrough(匹配到一个Case之后，继续向下匹配)</h5>
+let integerToDescribe = 5
+var description = "The number \(integerToDescribe) is"
+switch integerToDescribe {
+case 2, 3, 5, 7, 11, 13, 17, 19:
+	description += " a prime number, and also"
+	fallthrough
+default:
+	description += " an integer."
+}
+print(description)
+// Prints "The number 5 is a prime number, and also an integer."
+		</code></pre>
+		<h3>Labeled Statements(标签)</h3>
+		<p>
+			In Swift, you can nest loops and conditional statements inside other loops and conditional statements to create complex control flow structures. However, loops and conditional statements can both use the break statement to end their execution prematurely. Therefore, it is sometimes useful to be explicit about which loop or conditional statement you want a break statement to terminate. Similarly, if you have multiple nested loops, it can be useful to be explicit about which loop the continue statement should affect. (嵌套的流程控制中，循环和条件控制都能用break来终止当前的控制流，因此有时候显式地表明要终止的流程是很有用的，Continue也有类似的情况，因此可以给每个控制加一个标签)<br>
+			<pre><code>
+label name: while condition {
+
+	statements
+
+}
+
+
+
+
+let finalSquare = 25
+var board = [Int](repeating: 0, count: finalSquare + 1)
+board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+var square = 0
+var diceRoll = 0
+
+
+
+gameLoop: while square != finalSquare {
+	diceRoll += 1
+	if diceRoll == 7 { diceRoll = 1 }
+	switch square + diceRoll {
+	case finalSquare:
+		// diceRoll will move us to the final square, so the game is over
+		break gameLoop
+	case let newSquare where newSquare > finalSquare:
+		// diceRoll will move us beyond the final square, so roll again
+		continue gameLoop
+	default:
+		// this is a valid move, so find out its effect
+		square += diceRoll
+		square += board[square]
+	}
+}
+print("Game over!")
+
+<h5>Early Exit(提前退出)</h5>
+A guard statement, like an if statement, executes statements depending on the Boolean value of an statement. You use a guard statement to require that a condition must be true in order for the code after the guard statement to be executed. Unlike an if statement, a guard statement always has an else clause—the code inside the else clause is executed if the condition is not true. (guard表达式和if表达式一样，也是根据Boolean表达式来执行，不同的是guard表达式已定有else语句)
+
+func greet(person: [String: String]) {
+	guard let name = person["name"] else {
+		return
+	}
+	
+	print("Hello \(name)!")
+	
+	guard let location = person["location"] else {
+		print("I hope the weather is nice near you.")
+		return
+	}
+	
+	print("I hope the weather is nice in \(location).")
+}
+ 
+greet(person: ["name": "John"])
+// Prints "Hello John!"
+// Prints "I hope the weather is nice near you."
+greet(person: ["name": "Jane", "location": "Cupertino"])
+// Prints "Hello Jane!"
+// Prints "I hope the weather is nice in Cupertino."
+			</code></pre>
+		</p>
+		<h3>Checking API Availability(检查API是否可用)</h3>
+		
+	<p>Swift has built-in support for checking API availability, which ensures that you don’t accidentally use APIs that are unavailable on a given deployment target.(Swift有内置的用于检查API可用性的功能，来保证你所不回使用不适合某个版本系统的API)</p>
+
+			<p>The compiler uses availability information in the SDK to verify that all of the APIs used in your code are available on the deployment target specified by your project. Swift reports an error at compile time if you try to use an API that isn’t available.（编译器用SDK中API的availability信息来验证某个API是否适用于某个你要部署的系统版本）</p>
+
+			<p>You use an availability condition in an if or guard statement to conditionally execute a block of code, depending on whether the APIs you want to use are available at runtime. The compiler uses the information from the availability condition when it verifies that the APIs in that block of code are available.（你可以根据if或guard中关于该API是否适用的条件来执行相应的Block） </p>
+
+
+<pre><code>
+if #available(iOS 10, macOS 10.12, *) {
+	// Use iOS 10 APIs on iOS, and use macOS 10.12 APIs on macOS
+} else {
+	// Fall back to earlier iOS and macOS APIs
+}
+
+
+		</code></pre>
+		<p>
+			<p>The availability condition above specifies that on iOS, the body of the if executes only on iOS 10 and later; on macOS, only on macOS 10.12 and later. The last argument, *, is required and specifies that on any other platform, the body of the if executes on the minimum deployment target specified by your target. (上面的例子的条件中，指定该条件对应的block只在该版本或大于该版本的系统下才之行)<br>
+
+<span>一般的形式如下：</span>
+
+<pre>
+	<code>
+if #available(platform name version, ..., *) {
+
+	statements to execute if the APIs are available
+
+} else {
+
+	fallback statements to execute if the APIs are unavailable
+
+}
+	</code>
+</pre>
+		
+		</p>
+
+</p>	
+	</body>
+</html>

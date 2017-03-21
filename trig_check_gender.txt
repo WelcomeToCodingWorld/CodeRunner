@@ -1,0 +1,11 @@
+use jd;
+delimiter //
+create trigger trig_check_gender before insert on User 
+for each row 
+begin
+if new.gender <  0 then set new.gender = 0;
+elseif new.gender > 1 then set new.gender = 1;
+end if;
+end //
+
+ 

@@ -1,0 +1,5 @@
+each session coordinate a group of data transfer tasks
+each task represents a request for a specific url
+					
+source type-------------->交给某个servlet--------------->交给某个controller--------------------->view
+		根据.xml中的servletMapping		根据相应的.xml中的urlMapping      根据.xml中的viewResolver

@@ -1,0 +1,376 @@
+
+
+struct FixedLengthRange {
+	var firstValue: Int
+	let length: Int
+}
+var rangeOfThreeItems = FixedLengthRange(firstValue: 0, length: 3)
+// the range represents integer values 0, 1, and 2
+rangeOfThreeItems.firstValue = 6
+// the range now represents integer values 6, 7, and 8
+
+
+
+let rangeOfFourItems = FixedLengthRange(firstValue: 0, length: 4)
+// this range represents integer values 0, 1, 2, and 3
+rangeOfFourItems.firstValue = 6
+// this will report an error, even though firstValue is a variable property
+
+
+
+class DataImporter {
+	/*
+	 DataImporter is a class to import data from an external file.
+	 The class is assumed to take a non-trivial amount of time to initialize.
+	 */
+	var filename = "data.txt"
+	// the DataImporter class would provide data importing functionality here
+}
+ 
+class DataManager {
+	lazy var importer = DataImporter()
+	var data = [String]()
+	// the DataManager class would provide data management functionality here
+}
+ 
+let manager = DataManager()
+manager.data.append("Some data")
+manager.data.append("Some more data")
+// the DataImporter instance for the importer property has not yet been created
+
+
+ If you have experience with Objective-C, you may know that it provides two ways to store values and references as part of a class instance. In addition to properties, you can use instance variables as a backing store for the values stored in a property.
+
+Swift unifies these concepts into a single property declaration. A Swift property does not have a corresponding instance variable, and the backing store for a property is not accessed directly. This approach avoids confusion about how the value is accessed in different contexts and simplifies the property’s declaration into a single, definitive statement. All information about the property—including its name, type, and memory management characteristics—is defined in a single location as part of the type’s definition. 
+
+
+
+In addition to stored properties, classes, structures, and enumerations can define computed properties, which do not actually store a value. Instead, they provide a getter and an optional setter to retrieve and set other properties and values indirectly. 
+
+struct Point {
+	var x = 0.0, y = 0.0
+}
+struct Size {
+	var width = 0.0, height = 0.0
+}
+struct Rect {
+	var origin = Point()
+	var size = Size()
+	var center: Point {
+		get {
+			let centerX = origin.x + (size.width / 2)
+			let centerY = origin.y + (size.height / 2)
+			return Point(x: centerX, y: centerY)
+		}
+		set(newCenter) {
+			origin.x = newCenter.x - (size.width / 2)
+			origin.y = newCenter.y - (size.height / 2)
+		}
+	}
+}
+var square = Rect(origin: Point(x: 0.0, y: 0.0),
+				  size: Size(width: 10.0, height: 10.0))
+let initialSquareCenter = square.center
+square.center = Point(x: 15.0, y: 15.0)
+print("square.origin is now at (\(square.origin.x), \(square.origin.y))")
+// Prints "square.origin is now at (10.0, 10.0)"
+
+
+
+Classes and structures in Swift have many things in common. Both can:
+
+	Define properties to store values
+
+	Define methods to provide functionality
+
+	Define subscripts to provide access to their values using subscript syntax
+
+	Define initializers to set up their initial state
+
+	Be extended to expand their functionality beyond a default implementation
+
+	Conform to protocols to provide standard functionality of a certain kind
+	
+	
+	
+Unlike value types, reference types are not copied when they are assigned to a variable or constant, or when they are passed to a function. Rather than a copy, a reference to the same existing instance is used instead. 
+
+In Swift, many basic data types such as String, Array, and Dictionary are implemented as structures. This means that data such as strings, arrays, and dictionaries are copied when they are assigned to a new constant or variable, or when they are passed to a function or method.
+
+
+
+Identical to (===)
+
+Not identical to (!==)
+
+Use these operators to check whether two constants or variables refer to the same single instance:
+
+if tenEighty === alsoTenEighty {
+	print("tenEighty and alsoTenEighty refer to the same VideoMode instance.")
+}
+// Prints "tenEighty and alsoTenEighty refer to the same VideoMode instance."
+
+
+Note that “identical to” (represented by three equals signs, or ===) does not mean the same thing as “equal to” (represented by two equals signs, or ==):
+
+“Identical to” means that two constants or variables of class type refer to exactly the same class instance.
+
+“Equal to” means that two instances are considered “equal” or “equivalent” in value, for some appropriate meaning of “equal”, as defined by the type’s designer.
+
+
+
+If you have experience with C, C++, or Objective-C, you may know that these languages use pointers to refer to addresses in memory. A Swift constant or variable that refers to an instance of some reference type is similar to a pointer in C, but is not a direct pointer to an address in memory, and does not require you to write an asterisk (*) to indicate that you are creating a reference. Instead, these references are defined like any other constant or variable in Swift.
+
+
+All structures have an automatically-generated memberwise initializer, which you can use to initialize the member properties of new structure instances. Initial values for the properties of the new instance can be passed to the memberwise initializer by name:
+
+	let vga = Resolution(width: 640, height: 480)
+	
+	
+
+Unlike C and Objective-C, Swift enumeration cases are not assigned a default integer value when they are created. In the CompassPoint example above, north, south, east and west do not implicitly equal 0, 1, 2 and 3. Instead, the different enumeration cases are fully-fledged values in their own right, with an explicitly-defined type of CompassPoint.
+
+
+
+enum Planet {
+	case mercury, venus, earth, mars, jupiter, saturn, uranus, neptune
+}
+
+
+
+enum Barcode {
+	case upc(Int, Int, Int, Int)
+	case qrCode(String)
+}
+
+ This can be read as:
+
+“Define an enumeration type called Barcode, which can take either a value of upc with an associated value of type (Int, Int, Int, Int), or a value of qrCode with an associated value of type String.” 
+
+var productBarcode = Barcode.upc(8, 85909, 51226, 3)
+
+This example creates a new variable called productBarcode and assigns it a value of Barcode.upc with an associated tuple value of (8, 85909, 51226, 3). 
+
+
+	roductBarcode = .qrCode("ABCDEFGHIJKLMNOP")
+
+At this point, the original Barcode.upc and its integer values are replaced by the new Barcode.qrCode and its string value. Constants and variables of type Barcode can store either a .upc or a .qrCode (together with their associated values), but they can only store one of them at any given time.
+
+The different barcode types can be checked using a switch statement, as before. This time, however, the associated values can be extracted as part of the switch statement. You extract each associated value as a constant (with the let prefix) or a variable (with the var prefix) for use within the switch case’s body:
+
+	switch productBarcode {
+	case .upc(let numberSystem, let manufacturer, let product, let check):
+		print("UPC: \(numberSystem), \(manufacturer), \(product), \(check).")
+	case .qrCode(let productCode):
+		print("QR code: \(productCode).")
+	}
+	// Prints "QR code: ABCDEFGHIJKLMNOP."
+
+
+ If all of the associated values for an enumeration case are extracted as constants, or if all are extracted as variables, you can place a single var or let annotation before the case name, for brevity:
+
+switch productBarcode {
+case let .upc(numberSystem, manufacturer, product, check):
+	print("UPC : \(numberSystem), \(manufacturer), \(product), \(check).")
+case let .qrCode(productCode):
+	print("QR code: \(productCode).")
+}
+// Prints "QR code: ABCDEFGHIJKLMNOP."
+
+
+The barcode example in Associated Values shows how cases of an enumeration can declare that they store associated values of different types. As an alternative to associated values, enumeration cases can come prepopulated with default values (called raw values), which are all of the same type.
+
+Here’s an example that stores raw ASCII values alongside named enumeration cases:
+
+	enum ASCIIControlCharacter: Character {
+		case tab = "\t"
+		case lineFeed = "\n"
+		case carriageReturn = "\r"
+	}
+
+Raw values can be strings, characters, or any of the integer or floating-point number types. Each raw value must be unique within its enumeration declaration. 
+
+
+When you’re working with enumerations that store integer or string raw values, you don’t have to explicitly assign a raw value for each case. When you don’t, Swift will automatically assign the values for you. 
+
+	enum CompassPoint: String {
+		case north, south, east, west
+	}
+
+In the example above, CompassPoint.south has an implicit raw value of "south", and so on. 
+
+
+If you define an enumeration with a raw-value type, the enumeration automatically receives an initializer that takes a value of the raw value’s type (as a parameter called rawValue) and returns either an enumeration case or nil. You can use this initializer to try to create a new instance of the enumeration.
+
+
+
+let possiblePlanet = Planet(rawValue: 7)
+// possiblePlanet is of type Planet? and equals Planet.uranus
+
+
+A recursive enumeration is an enumeration that has another instance of the enumeration as the associated value for one or more of the enumeration cases. You indicate that an enumeration case is recursive by writing indirect before it, which tells the compiler to insert the necessary layer of indirection. 
+
+
+
+enum ArithmeticExpression {
+	case number(Int)
+	indirect case addition(ArithmeticExpression, ArithmeticExpression)
+	indirect case multiplication(ArithmeticExpression, ArithmeticExpression)
+}
+
+indirect enum ArithmeticExpression {
+	case number(Int)
+	case addition(ArithmeticExpression, ArithmeticExpression)
+	case multiplication(ArithmeticExpression, ArithmeticExpression)
+}
+
+
+
+
+
+let five = ArithmeticExpression.number(5)
+let four = ArithmeticExpression.number(4)
+let sum = ArithmeticExpression.addition(five, four)
+let product = ArithmeticExpression.multiplication(sum, ArithmeticExpression.number(2))
+
+func evaluate(_ expression: ArithmeticExpression) -> Int {
+	switch expression {
+	case let .number(value):
+		return value
+	case let .addition(left, right):
+		return evaluate(left) + evaluate(right)
+	case let .multiplication(left, right):
+		return evaluate(left) * evaluate(right)
+	}
+}
+ 
+print(evaluate(product))
+// Prints "18"
+
+
+
+
+
+An instance of a class is traditionally known as an object. However, Swift classes and structures are much closer in functionality than in other languages, and much of this chapter describes functionality that can apply to instances of either a class or a structure type. Because of this, the more general term instance is used. 
+
+
+Methods are functions that are associated with a particular type. Classes, structures, and enumerations can all define instance methods, which encapsulate specific tasks and functionality for working with an instance of a given type. Classes, structures, and enumerations can also define type methods, which are associated with the type itself. Type methods are similar to class methods in Objective-C. 
+
+
+The fact that structures and enumerations can define methods in Swift is a major difference from C and Objective-C. In Objective-C, classes are the only types that can define methods. In Swift, you can choose whether to define a class, structure, or enumeration, and still have the flexibility to define methods on the type you create.
+
+
+Every instance of a type has an implicit property called self, which is exactly equivalent to the instance itself. You use the self property to refer to the current instance within its own instance methods. 
+
+
+
+	func increment() {
+		self.count += 1
+	}
+
+In practice, you don’t need to write self in your code very often. If you don’t explicitly write self, Swift assumes that you are referring to a property or method of the current instance whenever you use a known property or method name within a method. This assumption is demonstrated by the use of count (rather than self.count) inside the three instance methods for Counter. 
+
+The main exception to this rule occurs when a parameter name for an instance method has the same name as a property of that instance. In this situation, the parameter name takes precedence, and it becomes necessary to refer to the property in a more qualified way. You use the self property to distinguish between the parameter name and the property name. 
+
+
+
+
+struct Point {
+	var x = 0.0, y = 0.0
+	func isToTheRightOf(x: Double) -> Bool {
+		return self.x > x
+	}
+}
+let somePoint = Point(x: 4.0, y: 5.0)
+if somePoint.isToTheRightOf(x: 1.0) {
+	print("This point is to the right of the line where x == 1.0")
+}
+// Prints "This point is to the right of the line where x == 1.0"
+
+
+
+
+Without the self prefix, Swift would assume that both uses of x referred to the method parameter called x.
+
+
+
+
+
+enum TriStateSwitch {
+	case off, low, high
+	mutating func next() {
+		switch self {
+		case .off:
+			self = .low
+		case .low:
+			self = .high
+		case .high:
+			self = .off
+		}
+	}
+}
+var ovenLight = TriStateSwitch.low
+ovenLight.next()
+// ovenLight is now equal to .high
+ovenLight.next()
+// ovenLight is now equal to .off
+
+
+
+
+Stored and computed properties are usually associated with instances of a particular type. However, properties can also be associated with the type itself. Such properties are known as type properties. 
+
+
+Structures and enumerations are value types. By default, the properties of a value type cannot be modified from within its instance methods.
+
+However, if you need to modify the properties of your structure or enumeration within a particular method, you can opt in to mutating behavior for that method. The method can then mutate (that is, change) its properties from within the method, and any changes that it makes are written back to the original structure when the method ends. The method can also assign a completely new instance to its implicit self property, and this new instance will replace the existing one when the method ends. 
+
+
+
+
+
+Unlike stored instance properties, you must always give stored type properties a default value. This is because the type itself does not have an initializer that can assign a value to a stored type property at initialization time.
+
+Stored type properties are lazily initialized on their first access. They are guaranteed to be initialized only once, even when accessed by multiple threads simultaneously, and they do not need to be marked with the lazy modifier.
+
+
+
+You define type properties with the static keyword. For computed type properties for class types, you can use the class keyword instead to allow subclasses to override the superclass’s implementation. The example below shows the syntax for stored and computed type properties:
+
+	struct SomeStructure {
+		static var storedTypeProperty = "Some value."
+		static var computedTypeProperty: Int {
+			return 1
+		}
+	}
+	enum SomeEnumeration {
+		static var storedTypeProperty = "Some value."
+		static var computedTypeProperty: Int {
+			return 6
+		}
+	}
+	class SomeClass {
+		static var storedTypeProperty = "Some value."
+		static var computedTypeProperty: Int {
+			return 27
+		}
+		class var overrideableComputedTypeProperty: Int {
+			return 107
+		}
+	}
+
+
+
+
+
+
+Swift provides a default initializer for any structure or class that provides default values for all of its properties and does not provide at least one initializer itself. The default initializer simply creates a new instance with all of its properties set to their default values. 
+
+
+
+
+
+
+
+
+

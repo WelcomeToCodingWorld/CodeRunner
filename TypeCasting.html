@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Swift Type Casting</title>
+	</head>
+	<body>
+	
+		<p>
+		Type casting is a way to check the type of an instance, or to treat that instance as a different superclass or subclass from somewhere else in its own class hierarchy. (类型转换就是检查某个实例等类型，或者说把某个实例看作是它的父类或子类)</p>
+		<p>
+			Type casting in Swift is implemented with the is and as operators. These two operators provide a simple and expressive way to check the type of a value or cast a value to a different type.(Swift中，类型的转换时用is和as实现的，简单且表现力强，同样你也可以用类型转换来判断某个类型是否遵守某个协议)
+		</p>
+		<pre>
+		<code>
+class MediaItem {<br>
+	var name: String<br>
+	init(name: String) {<br>
+		self.name = name<br>
+	}<br>
+}<br>
+
+class Movie: MediaItem {<br>
+	var director: String<br>
+	init(name: String, director: String) {<br>
+		self.director = director<br>
+		super.init(name: name)<br>
+	}<br>
+}<br>
+
+
+
+let library = [<br>
+	Movie(name: "Casablanca", director: "Michael Curtiz"),<br>
+	Song(name: "Blue Suede Shoes", artist: "Elvis Presley"),<br>
+	Movie(name: "Citizen Kane", director: "Orson Welles"),<br>
+	Song(name: "The One And Only", artist: "Chesney Hawkes"),<br>
+	Song(name: "Never Gonna Give You Up", artist: "Rick Astley")<br>
+]
+// the type of "library" is inferred to be [MediaItem]<br>
+
+		</code></pre>
+		<h3>Checking Type(is operator)</h3>
+		<pre><code>
+var movieCount = 0<br>
+var songCount = 0<br>
+ 
+for item in library {<br>
+	if item is Movie {<br>
+		movieCount += 1<br>
+	} else if item is Song {<br>
+		songCount += 1<br>
+	}<br>
+}<br>
+print("Media library contains \(movieCount) movies and \(songCount) songs")<br>
+// Prints "Media library contains 2 movies and 3 songs"<br>
+		</code></pre>
+		<h3>Downcasting(向下转换,向下转换可能失败)（as! or as? operator）</h3>
+		<pre><code>
+
+
+for item in library {<br>
+	if let movie = item as? Movie {<br>
+		print("Movie: \(movie.name), dir. \(movie.director)")<br>
+	} else if let song = item as? Song {<br>
+		print("Song: \(song.name), by \(song.artist)")<br>
+	}<br>
+}<br>
+ 
+// Movie: Casablanca, dir. Michael Curtiz<br>
+// Song: Blue Suede Shoes, by Elvis Presley<br>
+// Movie: Citizen Kane, dir. Orson Welles<br>
+// Song: The One And Only, by Chesney Hawkes<br>
+// Song: Never Gonna Give You Up, by Rick Astley<br>
+		</code></pre>
+		<h3>Type Casting for Any and AnyObject</h3>
+		<p>Swift provides two special types for working with nonspecific types: <br>
+			<ul>
+				<li>Any can represent an instance of any type at all, including function types.（Any可指任何类型的实例,包括可选类型） </li>
+				<li>AnyObject can represent an instance of any class type. (AnyObject可指任意类的实例)</li>
+			</ul>
+			<pre>
+				<code>
+var things = [Any]()<br>
+things.append(0))<br>
+things.append(0.0))<br>
+things.append(42))<br>
+things.append(3.14159))<br>
+things.append("hello"))<br>
+things.append((3.0, 5.0)))<br>
+things.append(Movie(name: "Ghostbusters", director: "Ivan Reitman")))<br>
+things.append({ (name: String) -> String in "Hello, \(name)" }))<br>
+
+
+
+
+for thing in things {<br>
+	switch thing {<br>
+	case 0 as Int:<br>
+		print("zero as an Int")<br>
+	case 0 as Double:<br>
+		print("zero as a Double")<br>
+	case let someInt as Int:<br>
+		print("an integer value of \(someInt)")<br>
+	case let someDouble as Double where someDouble > 0:<br>
+		print("a positive double value of \(someDouble)")<br>
+	case is Double:<br>
+		print("some other double value that I don't want to print")<br>
+	case let someString as String:<br>
+		print("a string value of \"\(someString)\"")<br>
+	case let (x, y) as (Double, Double):<br>
+		print("an (x, y) point at \(x), \(y)")<br>
+	case let movie as Movie:<br>
+		print("a movie called \(movie.name), dir. \(movie.director)")<br>
+	case let stringConverter as (String) -> String:<br>
+		print(stringConverter("Michael"))<br>
+	default:<br>
+		print("something else")<br>
+	}<br>
+}<br>
+ 
+// zero as an Int<br>
+// zero as a Double<br>
+// an integer value of 42<br>
+// a positive double value of 3.14159<br>
+// a string value of "hello"<br>
+// an (x, y) point at 3.0, 5.0<br>
+// a movie called Ghostbusters, dir. Ivan Reitman<br>
+// Hello, Michael<br>
+
+
+
+
+let optionalNumber: Int? = 3<br>
+things.append(optionalNumber)        // Warning<br>
+things.append(optionalNumber as Any) // No warning<br>
+
+
+				</code>
+			</pre>
+		</p>
+	</body>
+</html>

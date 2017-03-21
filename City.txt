@@ -1,0 +1,343 @@
+(
+{
+	code = 500000;
+	data =     (
+				{
+			code = 500101;
+			leves = 23;
+			name = "\U4e07\U5dde\U533a";
+		},
+				{
+			code = 500102;
+			leves = 23;
+			name = "\U6daa\U9675\U533a";
+		},
+				{
+			code = 500103;
+			leves = 23;
+			name = "\U6e1d\U4e2d\U533a";
+		},
+				{
+			code = 500104;
+			leves = 23;
+			name = "\U5927\U6e21\U53e3\U533a";
+		},
+				{
+			code = 500105;
+			leves = 23;
+			name = "\U6c5f\U5317\U533a";
+		},
+				{
+			code = 500106;
+			leves = 23;
+			name = "\U6c99\U576a\U575d\U533a";
+		},
+				{
+			code = 500107;
+			leves = 23;
+			name = "\U4e5d\U9f99\U5761\U533a";
+		},
+				{
+			code = 500108;
+			leves = 23;
+			name = "\U5357\U5cb8\U533a";
+		},
+				{
+			code = 500109;
+			leves = 23;
+			name = "\U5317\U789a\U533a";
+		},
+				{
+			code = 500110;
+			leves = 23;
+			name = "\U4e07\U76db\U533a";
+		},
+				{
+			code = 500111;
+			leves = 23;
+			name = "\U53cc\U6865\U533a";
+		},
+				{
+			code = 500112;
+			leves = 23;
+			name = "\U6e1d\U5317\U533a";
+		},
+				{
+			code = 500113;
+			leves = 23;
+			name = "\U5df4\U5357\U533a";
+		},
+				{
+			code = 500114;
+			leves = 23;
+			name = "\U9ed4\U6c5f\U533a";
+		},
+				{
+			code = 500115;
+			leves = 23;
+			name = "\U957f\U5bff\U533a";
+		},
+				{
+			code = 500222;
+			leves = 23;
+			name = "\U7da6\U6c5f\U53bf";
+		},
+				{
+			code = 500223;
+			leves = 23;
+			name = "\U6f7c\U5357\U53bf";
+		},
+				{
+			code = 500224;
+			leves = 23;
+			name = "\U94dc\U6881\U53bf";
+		},
+				{
+			code = 500226;
+			leves = 23;
+			name = "\U8363\U660c\U53bf";
+		},
+				{
+			code = 500227;
+			leves = 23;
+			name = "\U74a7\U5c71\U53bf";
+		},
+				{
+			code = 500229;
+			leves = 23;
+			name = "\U57ce\U53e3\U53bf";
+		},
+				{
+			code = 500230;
+			leves = 23;
+			name = "\U4e30\U90fd\U53bf";
+		},
+				{
+			code = 500231;
+			leves = 23;
+			name = "\U57ab\U6c5f\U53bf";
+		},
+				{
+			code = 500232;
+			leves = 23;
+			name = "\U6b66\U9686\U53bf";
+		},
+				{
+			code = 500233;
+			leves = 23;
+			name = "\U5fe0\U53bf";
+		},
+				{
+			code = 500234;
+			leves = 23;
+			name = "\U5f00\U53bf";
+		},
+				{
+			code = 500235;
+			leves = 23;
+			name = "\U4e91\U9633\U53bf";
+		},
+				{
+			code = 500236;
+			leves = 23;
+			name = "\U5949\U8282\U53bf";
+		},
+				{
+			code = 500237;
+			leves = 23;
+			name = "\U5deb\U5c71\U53bf";
+		},
+				{
+			code = 500238;
+			leves = 23;
+			name = "\U5deb\U6eaa\U53bf";
+		},
+				{
+			code = 500240;
+			leves = 23;
+			name = "\U77f3\U67f1\U571f\U5bb6\U65cf\U81ea\U6cbb\U53bf";
+		},
+				{
+			code = 500241;
+			leves = 23;
+			name = "\U79c0\U5c71\U571f\U5bb6\U65cf\U82d7\U65cf\U81ea\U6cbb\U53bf";
+		},
+				{
+			code = 500242;
+			leves = 23;
+			name = "\U9149\U9633\U571f\U5bb6\U65cf\U82d7\U65cf\U81ea\U6cbb\U53bf";
+		},
+				{
+			code = 500243;
+			leves = 23;
+			name = "\U5f6d\U6c34\U82d7\U65cf\U571f\U5bb6\U65cf\U81ea\U6cbb\U53bf";
+		},
+				{
+			code = 500116;
+			leves = 23;
+			name = "\U6c5f\U6d25\U533a";
+		},
+				{
+			code = 500117;
+			leves = 23;
+			name = "\U5408\U5ddd\U533a";
+		},
+				{
+			code = 500118;
+			leves = 23;
+			name = "\U6c38\U5ddd\U533a";
+		},
+				{
+			code = 500119;
+			leves = 23;
+			name = "\U5357\U5ddd\U533a";
+		}
+	);
+	leves = 23;
+	name = "\U91cd\U5e86\U5e02";
+},
+{
+	code = 230900;
+	data =     (
+				{
+			code = 230902;
+			leves = 102;
+			name = "\U65b0\U5174\U533a";
+		},
+				{
+			code = 230903;
+			leves = 102;
+			name = "\U6843\U5c71\U533a";
+		}
+	);
+	leves = 102;
+	name = "\U4e03\U53f0\U6cb3\U5e02";
+},
+{
+	code = 340300;
+	data =     (
+				{
+			code = 340301;
+			leves = 135;
+			name = "\U5e02\U8f96\U533a";
+		},
+				{
+			code = 340323;
+			leves = 135;
+			name = "\U56fa\U9547\U53bf";
+		}
+	);
+	leves = 135;
+	name = "\U868c\U57e0\U5e02";
+},
+{
+	code = 340800;
+	data =     (
+				{
+			code = 340803;
+			leves = 140;
+			name = "\U5927\U89c2\U533a";
+		},
+				{
+			code = 340822;
+			leves = 140;
+			name = "\U6000\U5b81\U53bf";
+		},
+				{
+			code = 340823;
+			leves = 140;
+			name = "\U679e\U9633\U53bf";
+		},
+				{
+			code = 340824;
+			leves = 140;
+			name = "\U6f5c\U5c71\U53bf";
+		},
+				{
+			code = 340825;
+			leves = 140;
+			name = "\U592a\U6e56\U53bf";
+		},
+				{
+			code = 340827;
+			leves = 140;
+			name = "\U671b\U6c5f\U53bf";
+		}
+	);
+	leves = 140;
+	name = "\U5b89\U5e86\U5e02";
+},
+{
+	code = 341800;
+	data =     (
+				{
+			code = 341802;
+			leves = 149;
+			name = "\U5ba3\U5dde\U533a";
+		},
+				{
+			code = 341821;
+			leves = 149;
+			name = "\U90ce\U6eaa\U53bf";
+		},
+				{
+			code = 341823;
+			leves = 149;
+			name = "\U6cfe\U53bf";
+		},
+				{
+			code = 341881;
+			leves = 149;
+			name = "\U5b81\U56fd\U5e02";
+		}
+	);
+	leves = 149;
+	name = "\U5ba3\U57ce\U5e02";
+},
+{
+	code = 350200;
+	data =     (
+				{
+			code = 350211;
+			leves = 151;
+			name = "\U96c6\U7f8e\U533a";
+		},
+				{
+			code = 350213;
+			leves = 151;
+			name = "\U7fd4\U5b89\U533a";
+		}
+	);
+	leves = 151;
+	name = "\U53a6\U95e8\U5e02";
+},
+{
+	code = 350800;
+	data =     (
+				{
+			code = 350821;
+			leves = 157;
+			name = "\U957f\U6c40\U53bf";
+		}
+	);
+	leves = 157;
+	name = "\U9f99\U5ca9\U5e02";
+},
+{
+	code = 450400;
+	data =     (
+				{
+			code = 450403;
+			leves = 256;
+			name = "\U4e07\U79c0\U533a";
+		},
+				{
+			code = 450422;
+			leves = 256;
+			name = "\U85e4\U53bf";
+		}
+	);
+	leves = 256;
+	name = "\U68a7\U5dde\U5e02";
+}
+)

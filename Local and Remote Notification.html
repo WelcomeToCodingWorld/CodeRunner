@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Local and Remote Notification</title>
+	</head>
+	<body>
+		<p>Local notifications and remote notifications are ways to inform users when new data becomes available for your app, even when your app is not running in the foreground. For example, a messaging app might let the user know when a new message has arrived, and a calendar app might inform the user of an upcoming appointment. The difference between local and remote notifications is straightforward: (本地通知和远程通知是当有新的消息可用时通知用户的方式，即使你的app不在前台运行。例如一个消息app当有新的消息到来时可能要让用户知道，一个日历app要通知用户即将到来的约会，本地通知和远程的区别是很明显的：)</p>
+		<ul><li>With local notifications, your app configures the notification details locally and passes those details to the system, which then handles the delivery of the notification when your app is not in the foreground. Local notifications are supported on iOS, tvOS, and watchOS.(对于本地通知，你的app在本地配置通知详情，并把通知详情传递给系统，然后当app不在前台运行时系统会处理通知的传递，iOS，tvOS，watchOS都支持本地通知)</li>
+		<li>With remote notifications, you use one of your company’s servers to push data to user devices via the Apple Push Notification service. Remote notifications are supported on iOS, tvOS, watchOS, and macOS. (而远程通知，你用你们公司的某个服务器通过苹果的推送通知服务中心推送给用户。iOS，tvOS，watchOS，macOS都支持远程推送)</li>
+		</ul>
+		<p>Both local and remote notifications require you to add code to support the scheduling and handling of notifications in your app. For remote notifications, you must also provide a server environment that is capable of receiving data from user devices and sending notification-related data to the Apple Push Notification service (APNs), which is an Apple-provided service that handles the delivery of remote notifications to user devices.(但是本地通知和远程通知需要你编写代码来支持你app上通知的安排和处理。对于远程通知，你也必须提供能从用户设备接受数据并把通知相关的数据发送给APNs的服务器环境，APNs是苹果提供的处理把远程通知推送到用户设备的服务)</p>
+	<h3>The User Notifications and User Notifications UI Frameworks(用户通知和用户通知界面框架)</h3>
+	<p>The User Notifications framework provides a consistent way to schedule and handle local notifications starting in iOS 10, watchOS 3, and tvOS 10. In addition to managing local notifications, the framework also supports the handling of remote notifications, although the configuration of remote notifications still requires some platform-specific APIs. Because it is a separate framework, you can use it both from the apps you create and from the extensions you create, such as your WatchKit extension. (用户通知框架提供了一种一致的方式来安排和处理从iOS10，watchOS 3，tvOS 10开始的本地通知，除了管理本地通知，该框架还支持远程通知的处理，尽管远程通知的配置仍然需要一些特定平台的API。由于这是一个单独的框架，你可以在你的新创建的app上用它，也可以在你创建的扩展(例如你的watchKit的扩展)中用它)</p>
+	<p>The User Notifications framework also supports the creation of notification service app extensions, which let you modify the content of remote notifications before they are delivered. If you include a notification service app extension with your app, the system passes incoming notifications to your extension before delivering them to the user. You might use this type of extension to implement end-to-end encryption for your app’s notifications, to modify the notification content before delivery, or to download additional images or media related to the notification. (用户通知框架还支持创建通知服务app的扩展，这类扩展让你在远程通知被发送之前改变其内容，如果你在你的app中包含一个通知服务app的扩展，系统会把收到的通知在推送给用户之前，发给这个扩展。你可能用这类扩展对你app的通知实现端到端的加密，在发送通知之前改变通知内容，或者下载额外的通知相关图片或媒体文件)</p>
+	<p>The User Notifications UI framework is a companion to the User Notifications framework that lets you customize the appearance of the system’s notification interface. You use the User Notifications UI framework to define a notification content app extension, whose job is to provide a view controller with custom content to display in the notification interface. The system displays your custom view controller instead of the default system interface. You might use this type of extension to incorporate media or dynamic content into your notification interfaces. (用户通知界面框架是用户通知框架的姐妹框架，让你能够自定义系统通知的界面。你可以用系统通知界面框架去定义一个通知内容app扩展，这个扩展的职责是提供一个在通知界面展示的自定义内容viewcontroller，系统会展示你自定义的view controller而不是默认的系统界面。你可以用这类扩展把媒体或动态内容引进通知界面)</p>
+<h3>When to Use Local and Remote Notifications(什么时候用本地和远程通知)</h3>
+<p>Because apps on iOS, tvOS, and watchOS are not always running, local notifications provide a way to alert the user when your app has new information to present. For example, an app that pulls data from a server in the background can schedule a local notification when some interesting piece of information is received. Local notifications are also well suited for apps such as calendar and to-do list apps that need to alert the user at a specific time or when a specific geographic location is reached. (由于运行在iOS，tvOS，watchOS上的app并不总是在运行，本地通知提供了一种当你的app有新信息要展示的时候发出提醒的方式。例如，一个正在运行在后台的从服务器拉取数据的app，能安排一个当收到一些有趣的信息的时候发送的本地通知。本地通知也非常适合像日历，代办事项表这样的app，这些app需要在特定时间或当到达特定位置时提醒用户)</p>
+<p>Remote notifications are appropriate when some or all of the app’s data is managed by your company’s servers. With remote notifications, you decide when you want to push a notification to the user’s device. For example, a messaging app would use remote notifications to let users know when new messages arrive. Because they are sent from your server, you can send remote notifications at any time, including when the app is not running on the user’s device.(当你app的部分或全部数据由你公司的服务器来管理的时候远程通知是非常合适的，对于远程通知，你可以决定什么时候想把通知推给用户的设备。例如，一个消息app会用远程通知把新消息推给用户。由于消息是从你们的服务器上发出的，你可以在任何时候发送远程通知，包括当你的app不处于运行状态的时候)</p>
+<h3>Local and Remote Notifications Look the Same to Users(远程通知和本地通知对于用户来说是看起来是一样的)</h3>
+<p>To the user, there is no difference between a local and remote notification when presented on a given device. Both types of notifications have the same default appearance, which is provided by the system. You can customize the appearance in some cases, but mostly you choose how you want the user to be notified. Specifically, you choose one of the following options for delivering the notification:(对用户来说，远程通知和本地通知在一个设备上的呈现是没有区别的。这两种类型的通知有着同样的默认系统界面。某些情况下，你可以自定义通知界面，但大多数时候主要是选择如何来通知用户，特别地，你有以下几种选项来选择发送通知)</p>
+<ul>
+<li>
+An onscreen alert or banner(屏幕上的警告框或横幅) 	
+</li>
+<li>A badge on your app’s icon(app上的图标) </li>
+<li>A sound that accompanies an alert, banner, or badge(伴随警告框、横幅、app上的图标的声音) </li>
+</ul>
+<p>When configuring local and remote notifications, choose the interaction type that is most appropriate for the type of information you are delivering. For example, a to-do list app might have a list of items, each of which has a time when the item must be completed and a priority. For high-priority items, you might display an alert when the completion time passes to let the user know that they should act on the item right away. For lower-priority items, you might apply a badge to the app’s icon or play a sound to provide a more subtle reminder to complete the item. (当配置本地和远程通知时，选择最适合你要推送的信息的交互类型。例如，一个代办事项表app可能有一个事项列表，列表的每一事项都包含一个该时间必须完成的时间以及优先级，对于高优先级的事项，当完成时间马上要到的时候，你可能会展示一个提醒框。对于较低优先级的事项你可能会在app上图标上展示一个标签或者不放一段声音来提醒用户完成该事项)</p>
+<p>Alerts let you display messages directly to the user, but the meaning of badges and sounds depends on your app. You might use different sounds to communicate specific types of events, such as the arrival of a message or the completion of a task. Badges always contain a numerical value and are commonly used to indicate the number of items that await the user’s attention. Figure 1-1 shows the positioning of a badge on the icon of an iOS app.(提醒框让你直接把消息展现给用户，但是图标标记以及声音的含义依你的app而定。你可能用不同的声音来传达不同类型的事件，例如一个消息的到来或一个任务的完成。图标标记经常包含一个数值来表明有多少事下等待用户处理)
+</p>
+<div><a href="http://album.sina.com.cn/pic/003xbDHjzy78XoxfRMY08" target="_blank"><img src="http://s9.sinaimg.cn/mw690/003xbDHjzy78XoxfRMY08&amp;690" width="158" height="158"></a></div>
+<p>Always use local and remote notifications judiciously to avoid annoying the user. The system lets users enable and disable the presentation of alerts, sounds, and badges on a per-app basis. Although notifications may still be delivered to your app, the system notifies the user only with the currently enabled options. If the user disables notifications altogether, APNs does not deliver your app’s notifications to the user’s device and the scheduling of local notifications always fails. (要审慎使用本地和远程通知以避免惹恼用户。系统让用户选择是否允许某app的提醒框、声音、图标标记的展示或播放。尽管通知可能仍然推给你的app，但是系统只在当前的设置选项下通知用户。如果用户不允许完全不允许推送通知，APNs就不会把通知发到用户的设备上，所有本地通知的安排就总是失败的)</p>
+<h3>
+Managing Your App’s Notification Support(管理你app的通知支持)	
+</h3>
+<p>Apps must be configured at launch time to support local and remote notifications. Specifically, you must configure your app in advance if it does any of the following:(app必须在启动时配置支持本地和远程通知。特别地，如果你的app要做以下这些事儿，你必须提前配置你的app)</p>
+<ul><li>Displays alerts, play sounds, or badges its icon in response to an arriving notification. (当通知到来时展示提醒框，播放声音，在app图标上放置徽章)</li>
+<li>Displays custom action buttons with a notification.(为某个通知展示自定义动作按钮)</li>
+</ul>
+<p>Typically, you perform all of your configuration before your application finishes launching. In iOS and tvOS, this means configuring your notification support no later than the application:didFinishLaunchingWithOptions: method of your UIApplication delegate. In watchOS, configure that support no later than the applicationDidFinishLaunching method of your WKExtension delegate. You may perform this configuration at a later time, but you must avoid scheduling any local or remote notifications targeting your app until this configuration is complete. (通常，你在你的app启动完成之前完成你所有的配置。在iOS和tvOS上，这意味着通知支持的配置不能晚于app delegate的application:didFinishLaunchingWithOptions:方法。在watchOS上，不能晚于WKExtension delegate的applicationDidFinishLaunching方法。你可以随后再进行配置，但是在安排本地和远程通知之前必须配置好)</p>
+<h3>Requesting Authorization to Interact with the User(请求用户授权)</h3>
+<p>In iOS, tvOS, and watchOS, apps must have authorization to display alerts, play sounds, or badge the app’s icon in response to incoming notifications. Requesting authorization puts control of those interactions in the hands of the user, who can grant or deny your request. The user can also change the authorization settings for your app later in the system settings.(在iOS，tvOS，watchOS上，app必须要有用户的授权才能在通知到来时展示提醒框，播放声音，或者在app图标上放置徽章，请求授权就把以上一些控制权交到了用户的手中。用户可以授权或拒绝你的请求。用户也可以随后在设置中心改变授权设置)</p>
+<p>To request authorization, call the requestAuthorizationWithOptions:completionHandler: method of the shared UNUserNotificationCenter object. If your app is authorized for all of the requested interaction types, the system calls your completion handler block with the granted parameter set to YES. If one or more interaction type is disallowed, the parameter is NO. Listing 2-1 shows how to request authorization to play sounds and display alerts. Use the completion handler block to update your app’s behaviors based on whether the interaction types were granted or denied.(要请求授权，调用UNUserNotificationCenter对象的requestAuthorizationWithOptions:completionHandler:方法，如果你的app已经被授权所有的交互类型，系统会以yes参数调用你的block，如果有一项或者多项交互类型被拒绝，参数会设置为no)
+</p>
+<pre><code>
+
+UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];<br>
+[center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert + UNAuthorizationOptionSound)<br>
+   completionHandler:^(BOOL granted, NSError * _Nullable error) {<br>
+	  // Enable or disable features based on authorization.<br>
+}];<br>
+
+</code></pre>
+<p>The first time that your app launches and calls the requestAuthorizationWithOptions:completionHandler: method, the system prompts the user to grant or deny the requested interactions. Because the system saves the user’s response, calls to this method during subsequent launches do not prompt the user again. (你的app第一次启动并调用requestAuthorizationWithOptions:completionHandler:方法时，系统提醒用户授权或拒绝交互请求，因为系统保存了用户的响应。随后启动的时候再调用该方法就不会再提示用户)</p>
+<h3>Configuring Categories and Actionable Notifications(配置通知类别和动作通知)</h3>
+<p>Actionable notifications give the user a quick and easy way to perform relevant tasks in response to a notification. Instead of the user being forced to launch your app, the interface for an actionable notification displays custom action buttons that the user can tap. When tapped, each button dismisses the notification interface and forwards the selected action to your app for immediate handling. Forwarding the action to your app avoids the need for the user to navigate further in your app to perform the action, thereby saving time.（可响应的通知给了用户一个快速简单地响应通知执行相关任务的方式。可响应通知的界面展示了供用户点击的自定义的动作按钮，而不是强制用户启动app。点击动作按钮，通知界面会消失，同时该动作按钮对应的动作会传达给app，从而避免了在app中进一步导航用户执行这一动作，节省了时间）
+</p>
+<p>Apps must explicitly add support for actionable notifications. At launch time, apps must register one or more categories, which define the types of notifications that your app sends. Associated with each category are the actions that the user can perform when a notification of that type is delivered. Each category can have up to four actions associated with it, although the number of actions actually displayed depends on how and where the notification is displayed. For example, banners display no more than two actions. (app必须显式地支持动作通知，在启动时，app必须注册一种或多种定义了你的app所支持的通知类型的类别，每一种类别有多大4种相关的动作。尽管展示的动作的数量实际上是由如何、在那里展示通知来决定的。例如，横幅展示的动作不超过两种。)</p>
+<h3>Registering the Notification Categories for Your App(为app注册通知类别)</h3>
+<p>Categories define the types of notifications that your app supports and communicate to the system how you want a notification to be presented. You use categories to associate custom actions with a notification and to specify options for how to handle notifications of that type. For example, you use the category options to specify whether the notification can be displayed in a CarPlay environment.(类别定义了app支持的类型，并告诉系统你想如何展示通知。用类别来把自定义动作和通知关联起来，并指定如何处理那种类型的通知的选项。例如，指定通知是否可以在CarPlay环境下展示)</p>
+<p>At launch time, you register all of your app’s categories at once using the setNotificationCategories: method of the shared UNUserNotificationCenter object. Before calling that method, you create one or more instances of the UNNotificationCategory class and specify the category name and options to use when displaying notifications of that type. Category names are internal to your app and are never seen by the user. When scheduling notifications, you include the category name in the notification’s payload, which the system then uses to retrieve the options and display the notification. (启动时，用UNUserNotificationCenter对象的setNotificationCategories:方法注册app的所有类别。在调用该方法之前，当然要创建要注册的UNNotificationCategory，指定类别的名字、展示那种类型的通知时要使用的选项，类别的名字在app的内部，用户永远看不见。当安排通知的时候，把通知的类别名包含在通知的payload中，系统会根据类别来获取展示选项并把通知展示给用户)</p>
+<pre><code>
+
+UNNotificationCategory* generalCategory = [UNNotificationCategory
+	 categoryWithIdentifier:@"GENERAL"<br>
+	 actions:@[]<br>
+	 intentIdentifiers:@[]<br>
+	 options:UNNotificationCategoryOptionCustomDismissAction];<br>
+ 
+// Register the notification categories.<br>
+UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];<br>
+[center setNotificationCategories:[NSSet setWithObjects:generalCategory, nil]];<br>
+
+</code></pre>
+<p>You are not required to assign a category to all of the notifications that you schedule from your app. However, if you do not include a category, your notification is displayed without any custom actions or configuration options.(没必要把你app的所有通知都赋予某一类别，然而，如果你的通知不属于某一类别，那么你的通知在展示时就不会有任何自定义动作或配置选项)
+</p>
+
+<h3>
+	Adding Custom Actions to Your Categories(给你的通知类别添加自定义动作)
+</h3>
+<p>Each of the categories you register may contain up to four custom actions. When a category contains custom actions, the system adds buttons to the notification interface, each with the title of one of your custom actions. If the user taps one of your custom actions, the system sends the corresponding action identifier to your app, launching your app as needed. (你注册的每一个类别可能包含多达四种自定义动作。当一个类别包含自定义动作时，系统会在通知界面添加动作按钮。如果用户点击了你的自定义按钮，系统会发送相关的动作标识给你的app，如果有必要将启动你的app)</p>
+<p>To define a custom action, create a UNNotificationAction object and add it to one of your category objects. Each action contains the title string for the corresponding button and options for how to display the button and process the associated task. When the user selects an action, the system provides your app with the action’s identifier string, which you then use to identify the task to perform. Listing 2-3 extends the example in Listing 2-2 by adding a new category with two custom actions.(要定义自定义按钮，创建UNNotificationAction并把它添加到你的类别。每个动作包含一个该动作按钮的标题和一些如何展示该动作按钮以及如何处理相关任务的选项。当用户选择了该按钮，系统会把该动作的标识提供给你的app，以便你随后用来表示要执行的任务。)
+</p>
+<pre><code>
+
+UNNotificationCategory* generalCategory = [UNNotificationCategory
+			categoryWithIdentifier:@"GENERAL"<br>
+			actions:@[]<br>
+			intentIdentifiers:@[]<br>
+	options:UNNotificationCategoryOptionCustomDismissAction];<br>
+ 
+// Create the custom actions for expired timer notifications.<br>
+UNNotificationAction* snoozeAction = [UNNotificationAction
+			actionWithIdentifier:@"SNOOZE_ACTION"<br>
+			title:@"Snooze"<br>
+			options:UNNotificationActionOptionNone];<br>
+ 
+UNNotificationAction* stopAction = [UNNotificationAction
+			actionWithIdentifier:@"STOP_ACTION"<br>
+			title:@"Stop"<br>
+			options:UNNotificationActionOptionForeground];<br>
+ 
+// Create the category with the custom actions.<br>
+UNNotificationCategory* expiredCategory = [UNNotificationCategory
+			categoryWithIdentifier:@"TIMER_EXPIRED"<br>
+			actions:@[snoozeAction, stopAction]<br>
+			intentIdentifiers:@[]<br>
+			options:UNNotificationCategoryOptionNone];<br>
+ 
+// Register the notification categories.
+UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];<br>
+[center setNotificationCategories:[NSSet setWithObjects:generalCategory, expiredCategory,
+			nil]];<br>
+
+</code></pre>
+<p>Although you may specify up to four custom actions for each category, the system may display only the first two actions in some circumstances. For example, the system displays only two actions when displaying the notification in a banner. When initializing your UNNotificationCategory objects, always configure the array of actions so that the most relevant actions are first in the array. (尽管你可以为每个类别指定多达四种自定义动作，在某些情况下系统可能只会展示前两个动作按钮。例如，系统最多会在横幅上展示两个动作按钮，因此在初始化类别的时候，把最相关的动作放在动作数组的前面)</p>
+<p>If you configure an action using the UNTextInputNotificationAction class, the system provides a way for the user to enter text as part of the notification response. Text input actions are useful for gathering free form text from the user. For example, a message app could allow the user to provide a custom response to a message. When a text input action is delivered to your app to handle, the system packages the user’s response in a UNTextInputNotificationResponse object.(如果你用UNTextInputNotificationAction来配置动作，系统为用户提供了一种将输入文字作为响应通知的一部分的方法。文本输入动作是收集用户的无格式的文本的有效的方式。例如一个消息app可以允许用户提供一种自定义的消息响应。当一个文本输入动作被传达到你的app，系统会把用户的响应封装成UNTextInputNotificationResponse对象。)</p>
+<h3>Preparing Custom Alert Sounds(提供自定义的提醒声音)</h3>
+<p>Local and remote notifications can specify custom alert sounds to be played when the notification is delivered. You can package the audio data in an aiff, wav, or caf file. Because they are played by the system-sound facility, custom sounds must be in one of the following audio data formats:(本地和远程通知能至指定当通知到达时播放的自定义的提醒声音。你可以把音频数据封装成aiff,wav或者caf文件，由于这些音频是用系统的声音设备播放的，所以这些自定义的音频必须是以下这些音频格式：)</p>
+<ul><li>
+	Linear PCM (线性脉冲编码调制)
+</li>
+<li>MA4 (IMA/ADPCM) (自适应查分脉冲编码调制)</li>
+<li>µLaw</li>
+<li>aLaw</li>
+</ul>
+<p>Place custom sound files in your app bundle or in the Library/Sounds folder of your app’s container directory. Custom sounds must be under 30 seconds when played. If a custom sound is over that limit, the default system sound is played instead. (把自定义的音频文件放在app bundle中，或者放在Library/Sounds目录下。自定义的音频必须在30秒以内，否则将播放默认的系统声音。)</p>
+<p>You can use the afconvert tool to convert sounds. For example, to convert the 16-bit linear PCM system sound Submarine.aiff to IMA4 audio in a CAF file, use the following command in the Terminal app: (你可以用afconvert工具转换音频。例如，要把16位线性脉冲编码调制的音频Submarine.aiff转换为IMA4的CAF文件，可以用以下命令：)</p>
+<pre><code>afconvert /System/Library/Sounds/Submarine.aiff ~/Desktop/sub.caf -d ima4 -f caff -v</code></pre>
+<h3>Managing Your App’s Notification Settings(配置app的通知设置)</h3>
+<p>
+	Because users can change the notification settings for your app at any time, you can use the getNotificationSettingsWithCompletionHandler: method of the shared UNUserNotificationCenter object to get your app’s authorization status at any time. That method returns a UNNotificationSettings object whose contents reflect your app’s current authorization status and the current notification environment.(由于用户能改变你的app 的通知设置，你可以在任何时候用UNUserNotificationCenter对象的getNotificationSettingsWithCompletionHandler:方法来获取你的app的授权状态，这个方法返回一个UNNotificationSettings对象，该对象的内容反映了你的app当前的授权状态和当前的通知环境)
+</p>
+<p>Use the information in the UNNotificationSettings object to adjust your app’s notification-related code. You can communicate your app’s alert, badge, and sound authorization settings to your custom server so that your server can adjust the options it includes in any remote notification payloads. (用UNNotificationSettings的信息来调整你app的通知相关的代码。你可以把你app 的alert,badge,sound的授权设置提供给你的服务器，以便服务器来调整它在远程通知payload中包含的选项)</p>
+<h3>Manage Delivered Notifications</h3>
+<p>When local and remote notifications are not handled directly by your app or the user, they are displayed in Notification Center so that they can be viewed later. Use the getDeliveredNotificationsWithCompletionHandler: method of the shared UNUserNotificationCenter object to get a list of notifications still being displayed in Notification Center. If you find any notifications that are now outdated and should not be displayed to the user, you can remove them using the removeDeliveredNotificationsWithIdentifiers: method.(当本地和远程通知没有直接被你的app或者用户处理，它们将展示在通知中心以便随后用户能看到。用UNUserNotificationCenter对象的getDeliveredNotificationsWithCompletionHandler:方法来获取仍旧展示在通知中心的通知列表，如果你发现有通知已经过期了并且不应该再展示给用户了，你可以用removeDeliveredNotificationsWithIdentifiers:方法从通知中心移除该通知) </p>
+<div>译自：<a href="https://developer.apple.com/library/prerelease/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/SupportingNotificationsinYourApp.html#//apple_ref/doc/uid/TP40008194-CH4-SW1">https://developer.apple.com/library/prerelease/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/SupportingNotificationsinYourApp.html#//apple_ref/doc/uid/TP40008194-CH4-SW1</a></div>
+	</body>
+</html>

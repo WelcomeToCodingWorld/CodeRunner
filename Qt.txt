@@ -1,0 +1,10 @@
+Qt:
+
+isEmpty($$list($$system("/usr/bin/xcrun -find xcrun 2>/dev/null")))
+isEmpty($$list($$system("/usr/bin/xcrun -find xcodebuild 2>/dev/null")))
+
+
+mysql> source /Users/zz/Downloads/knowledge.db
+ERROR: 
+ASCII '\0' appeared in the statement, but this is not allowed unless option --binary-mode is enabled and mysql is run in non-interactive mode. Set --binary-mode to 1 if ASCII '\0' is expected. Query: 'SQLite format 3'.
+Bye

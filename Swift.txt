@@ -1,0 +1,118 @@
+dataType:String,Int,Double,Float,Array,Set,Dictionary,Structure,Enumeration,Class
+typeCasting
+operator
+variable
+closure
+function
+
+
+property,method and subscript:class、structure、enumeration
+
+extension:class、structure 、enumeration、protocol
+initialization:structure,class,enumeration
+deinitializer:class(at most one) without parenthesis and parameters
+inheritance and overriding:class
+
+
+property observer:stored property
+error handling(Try Catch Throw)
+memory management(Arc)
+access control
+generic
+
+closure->function->method
+(Lazy)stored property:class structure
+computed property:class structure enumeration
+
+
+subscript:getter and setter(optional)
+stored property and instance variable:are unified in Swift
+computed property : getter and setter(optional)
+computed property:for class, use class keyword to allow its subclass to override its implementation
+
+computed property:must be declared with var rather let
+
+The default value ties the property's initialization more closely to its declaration,So if a property always takes the same initial value,provide a default value rather than setting a value within an initializer.
+
+Properties of optional type are automatically initialized with a value of nil,indicating that the  property is deliberately intended to hava "not value yet" during initialization.
+
+For class instances, a constant property can be modified during initialization only by the class that introduces it,it can not be modified by a subcalss.
+
+meberwise initializer：structure
+default initializer:class，structure(With Condition)
+
+
+Type-Safe:To be clear about the types of values your code can work with. For example,if part of your code need expects a String,type safety prevents you from passing it an Int by mistake.
+Likewise,type safety prevents you from assigning an optional String to a piece of code that expects a nonoptionala String.
+
+Initializer delegation:Initializers call other initializers to perform part of an instance's initialization.
+
+classes:Have additional responsibilities for ensuring all stored properties he inherite are assigned a suitable value during initialization.
+
+If you want your custom type to be initializable with default initialzer or memberwise inititalizer and also your custom initilizer，write your custom initilizers in extensions rather than as part of the value type's origin implementations.
+
+If your provide a custom initializer for a value type,you will no longer have access to the default initializers.This constraint prevent a situation in which additional essential set-up  provided by a more complex initializer is circumvented accidentally by someone using ont of the automatic initializers.
+
+
+designated initializer(primary):fully initializes all properties introduced by that class and calls an appropriate superclass to continue the initialization process up to the superclass chain.
+
+convenience initializer(secondary):call a designated initializer or create a instance of that class for a specific use.
+
+To simplify the relationships between designated initilizers and convenience initializers:
+Three rules for delegation calls between initializers:
+1.a designated initializer must call a designated initializer from its immediate superclass
+2.a convenience initializer must call anther initializer from the same class.
+3.a convenience initializer must ultimately call a designated initialzer.
+
+A simple way to remember this is :
+1.a designated initializer must delegate up
+2.a convenience initializer must delegate across
+
+Two-Phase Initialization:
+In the first phase,every stored property is assigned a initial value by the class that introduced it .
+
+
+Swift subclasses do not inherit their superclass initializers by default. Swift approach prevent a situation in which a simpler initializer from a superclass is inherited by a more specialized subclass and is used to create a new instance that is not fully or correctly initialized.
+
+
+Automatic initializer Inheritance:
+Assuming that you provide default values for any new propertied you introduce in a subclass:
+Rule1:If your subclass doesn't define any designated initialzers,it automatically inherit all of the superclass designated initializers
+
+Rulu2:If your subclass implementatino of all of its superclass designated initializers---either by inheriting them as per rule 1,or providing a custom implementaion as part of its definition---then it inherits all of the superclass convenience initializers.
+
+These rules apply even if your subclass adds further convenience initializers.
+
+
+Failable Initializer:
+
+enum TemperatureUnit {
+	case kelvin, celsius, fahrenheit
+	init?(symbol: Character) {
+		switch symbol {
+		case "K":
+			self = .kelvin
+		case "C":
+			self = .celsius
+		case "F":
+			self = .fahrenheit
+		default:
+			return nil
+		}
+	}
+}
+
+
+Enumeration:init from Raw Value   (define a enumeration with a raw value type)
+
+Optional Binding:
+if let constantName =  someOptional{
+	//the someOptional contains a value 
+	}eles{
+	//the someOptional does not contains a value
+	
+}
+	
+
+
+

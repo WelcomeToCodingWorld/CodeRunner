@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Configuring Remote Notification Support(配置支持远程推送)</title>
+	</head>
+	<body>
+		<h3>Configuring Remote Notification Support</h3>
+		<p>Remote notifications are a way for you to deliver up-to-date information to users of your app, even when the app is not running on the user’s device. Most of the work for implementing remote notifications happens on your company’s servers, but you must also do the following to configure remote notification support for your app:(远程通知是一种发送最新信息给用户的方式，即使你的app not running，实现远程推送的大部分工作发生在你们公司的服务器上，但是你还必须做如下的配置来支持远程推送：)</p>
+<ol>
+	<li>Enable the Push Notifications capability for your app.(打开app的远程推送功能)</li>
+	<li>Register with APNs in your app’s launch-time code.(在app启动时注册APNs)</li>
+	<li>Implement support for handling incoming remote notifications. (实现支持处理收到推送的功能)</li>
+</ol>		
+<h3>Enabling the Push Notifications Capability(打开app的远程推送功能)</h3>
+<p>Apps that handle remote notifications must have the proper entitlements to talk to APNs. You add these entitlements to your app using the Capabilities pane of your Xcode project.(处理远程推送的app必须有合适的与APNs对话的权限。你可以在Xcode项目的功能面板给app授权)
+</p>
+<div>
+	<a href="capability"></a>
+</div>
+<p>Apps without the proper entitlements will be rejected during the App Store review process. During testing, trying to register with APNs without the proper entitlements will return an error.(没有合适权限的app在App Store审核时会被拒。测试时，视图注册APNs而没有合适的权限奖返回一个错误)</p>
+<h3>Registering to Receive Remote Notifications(注册APNs以接收远程通知)</h3>
+<p>Each time your app launches, it must register with APNs. The methods you use for registering with APNs differ according to the platform, but the high-level process is as follows: (每次app启动，必须注册APNs。注册方法因平台而异，但高层过程大概是这样的：)</p>
+<ol><li>Obtain a device token from APNs using platform-specific APIs. (用特定平台的API从APNs获取设备token)</li>
+<li>Send the device token to your server.(把token发给服务器)</li>
+</ol>
+<p>Device tokens are unique to a specific app and device. Upon receiving a device token, it is your responsibility to open a network connection to your server and forward the device token along with any other relevant data. On your server, use the device token and any other data to generate remote notifications for the specific device. When sending remote notifications to a device, you must always include the device token with the data you send to APNs.(设备的token对于特定的app和设备是唯一的。接收到token之后，把它提交给服务器就是你的事儿了。在你们的服务器上用token和其他数据来对特定设备发起远程推送。当发送远程推送给设备时，你必须总是在推送数据中包含设备的token值)</p>
+<p>Never cache device tokens; always get them from the system when you need them. Although device tokens are unique to an app and device, they can change over time. The device token can change at any time but is guaranteed to be different when the user restores their device from a backup, when the user installs your app on a new device, and when the user reinstalls the operating system. Fetching the token from the system ensures that you always have the current token needed to communicate with APNs. In addition, if the token has not changed, fetching it is fast and does not incur any significant overhead. (永远不要缓存设备的token值，需要的时候总是从系统获取。尽管设备的token是对于设备和app是唯一的，但是它们会随时间而变化。设备的token随时可能变化，但是当用户从备份还原设备时，当用户重新安装系统操作系统时，当用户在一个新设备上安装你的app时，token值肯定会变，从系统获取token保证了你总是有和APNs会话的需要的token值。此外，如果token值没有变化，获取它也是很快的不会造成什么过载之类的问题)</p>
+<p>When the device token changes, the user must launch your app once before remote notifications can once again be delivered to that device. (当设备的token发生变化时，用户必须重启一次你的app才能收到远程推送)</p>
+<p>Apps running on watchOS do not register for remote notifications explicitly. Watch apps rely on their paired iPhone to forward remote notifications to Apple Watch for display. The forwarding of remote notifications happens when the iPhone is locked (or the screen is asleep) and the Apple Watch is on the user’s wrist and unlocked.(watchOS上的app不显式地注册APNs.Watch app依赖于跟其配对的iPhone来把远程通知转送到Watch。当iPhone锁定时(或者屏幕休眠时)才会转发远程推送给watch)</p>
+<h3>Obtaining a Device Token on iOS and tvOS(在iOS和tvOS上获取设备token)</h3>
+<p>On iOS and tvOS, you obtain a device token for your app by calling the registerForRemoteNotifications method of the UIApplication object. It is recommended that you call this method at launch time as part of your normal startup sequence. The first time your app calls this method, the app object requests the token from APNs. After the initial call, the app object contacts APNs only when the device token changes; otherwise, it returns the existing token quickly. (在iOS和tvOS上，调用UIApplication对象的registerForRemoteNotifications方法来获取token值，建议把这一步当作app启动序列中的一步。你的app第一次调用该方法时，app对象向APNs请求token，第一次调用之后，只有当token改变时app对象才联系APNs。否则将快速返回已经存在的token)</p>
+<p>The app object notifies its delegate asynchronously upon the successful or unsuccessful retrieval of the device token. You use these delegate callbacks to process the device token or to handle any errors that arose. You must implement the following delegate methods to track whether registration was successful: (app对象会异步通知它的代理获取token的结果。你可以用这些代理来处理设备token或处理引发的错误，要追踪是否注册成功，必须实现以下方法：)</p>
+<ul><li>Use the application:didRegisterForRemoteNotificationsWithDeviceToken: to receive the device token and forward it to your server. (用application:didRegisterForRemoteNotificationsWithDeviceToken:来接收设备token，并把它转发给服务器)</li>
+<li>Use the application:didFailToRegisterForRemoteNotificationsWithError: to respond to errors.(用application:didFailToRegisterForRemoteNotificationsWithError:来响应注册引发的错误)</li>
+</ul>
+<p>If the device token changes while your app is running, the app object calls the appropriate delegate method again to notify you of the change.(如果app在运行时设备token改变了，app对象会调用合适的方法来通知你这个改变)</p>
+<pre><code>
+- (void)applicationDidFinishLaunching:(UIApplication *)app {<br>
+	// Configure the user interactions first.<br>
+	[self configureUserInteractions];<br>
+ 
+   // Register for remote notifications.<br>
+	[[UIApplication sharedApplication] registerForRemoteNotifications];<br>
+}
+ 
+// Handle remote notification registration.
+- (void)application:(UIApplication *)app<br>
+		didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken{<br> 
+	// Forward the token to your server.<br> 
+	[self enableRemoteNotificationFeatures];<br> 
+	[self forwardTokenToServer:devTokenBytes];<br> 
+}
+ 
+- (void)application:(UIApplication *)app<br> 
+		didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {<br> 
+	// The token is not currently available.<br> 
+	NSLog(@"Remote notification support is unavailable due to error: %@", err);<br> 
+	[self disableRemoteNotificationFeatures];<br> 
+}
+
+</code></pre>
+<p>If a cellular or Wi-Fi connection is not available, neither the application:didRegisterForRemoteNotificationsWithDeviceToken: method nor the application:didFailToRegisterForRemoteNotificationsWithError: method is called. For Wi-Fi connections, this sometimes occurs when the device cannot connect with APNs over the configured port. If this happens, the user can move to another Wi-Fi network that isn’t blocking the required port. On devices with a cellular radio, the user can also wait until the cellular data service becomes available. (如果没有蜂窝网络或者Wi-Fi连接，application:didRegisterForRemoteNotificationsWithDeviceToken: 和application:didFailToRegisterForRemoteNotificationsWithError:都不会调用，对于Wi-Fi连接，当设备不能通过配置的端口连接到APNs时，这种情况会发生。如果发生了，用户可以连接到其他不阻塞该必要端口的Wi-Fi网络。对于使用蜂窝网络的设备，用户也只能等到数据服务可用才能注册成功）
+)</p>
+<p>In your application:didFailToRegisterForRemoteNotificationsWithError: implementation, use the error object to disable any features related to remote notifications. Because notifications are not going to be arriving anyway, it is better to degrade gracefully and avoid any local work needed to facilitate remote notifications. If remote notifications become available later, the app object notifies you by calling your delegate’s application:didRegisterForRemoteNotificationsWithDeviceToken: method.（在application:didFailToRegisterForRemoteNotificationsWithError:方法的实现中，用error对象来关闭所有与远程推送相关的功能，如果远程推送可用了，app对象会调用application:didRegisterForRemoteNotificationsWithDeviceToken:方法通知你）
+</p>
+<h3>Obtaining a Device Token on macOS(在macOS上获取设备token)</h3>
+<pre><code>
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {<br>
+	// Configure the user interactions first.<br>
+	[self configureUserInteractions];<br>
+ 
+	[NSApp registerForRemoteNotificationTypes:(NSRemoteNotificationTypeAlert | NSRemoteNotificationTypeSound)];<br>
+}
+ 
+- (void)application:(NSApplication *)application<br>
+		didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {<br>
+	// Forward the token to your server.<br>
+	[self forwardTokenToServer:deviceToken];<br>
+}<br>
+ 
+- (void)application:(NSApplication *)application<br>
+		didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {<br>
+	NSLog(@"Remote notification support is unavailable due to error: %@", error);<br>
+	[self disableRemoteNotificationFeatures];<br>
+}<br>
+
+</code></pre>
+<h3>Handling Remote Notifications(处理远程通知)</h3>
+<p>The User Notifications framework offers a single code path for handling many tasks associated with local and remote notifications. Specifically, you handle the following tasks using the same techniques: (User Notifications框架提供了一个编码途径来处理本地和远程通知相关的许多任务)</p>
+<ul>
+	<li>If your app is in the foreground, you can receive the notification directly and silence it.(如果你的app在前台，你可以直接收到通知，静默处理它)</li>
+	<li>If your app is in the background or not running: (如果你的app在后台或者没有运行)
+	<ul>
+	<li>You can respond when the user selects a custom action associated with a notification. (当用户选择和该通知相关的自定义动作按钮时，你可以做出相应的响应)</li>
+	<li>You can respond when the user dismisses the notification or launches your app. (当用户显式地让通知界面消失时或者启动app时，你也可以做出相应的响应)</li>
+	</ul>
+	</li>
+</ul>
+
+<p>In addition to handling notifications through the methods of the User Notifications framework, your app receives the entire payload of a remote notification through its app delegate. When a remote notification arrives, the system handles user interactions normally when the app is in the background. It also delivers the notification payload to the application:didReceiveRemoteNotification:fetchCompletionHandler: method of the app delegate in iOS and tvOS. In macOS, the payload is delivered to the application:didReceiveRemoteNotification: method of the app delegate. You can use these methods to examine the payload and perform any related tasks. For example, upon receiving a silent remote notification, you might start downloading new content for your app. (除了通过User Notifications框架处理通知，你的app也可以通过app delegate接收到整个远程通知的payload。当app在后台收到远程通知时，系统会正常地处理用户交互。它同样会把通知的payload传递给app delegate的application:didReceiveRemoteNotification:fetchCompletionHandler:方法(在iOS和tvOS上)，所以你也可以用这个方法检查payload，并执行一些相关的任务。例如，接收到一个静默的远程通知时，你可以开始下载新内容)</p>
+
+	</body>
+</html>

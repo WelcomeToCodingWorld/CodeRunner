@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<p>In addition to the operators described in Basic Operators, Swift provides several advanced operators that perform more complex value manipulation. These include all of the bitwise and bit shifting operators you will be familiar with from C and Objective-C(除了基本操作符，Swift还提供了几个高级操作符，用来执行更复杂的值操作，包括所有的你可能在C和Objective-C中熟悉的按位、移位操作符)</p>
+		<p>Unlike arithmetic operators in C, arithmetic operators in Swift do not overflow by default. Overflow behavior is trapped and reported as an error. To opt in to overflow behavior, use Swift’s second set of arithmetic operators that overflow by default, such as the overflow addition operator (&+). All of these overflow operators begin with an ampersand (&). (不像C中的算术运算符，Swift中的算术运算符默认是不允许溢出的，溢出操作将陷入内核并报错。要订制或选择溢出行为，用Swift的第二套算术运算操作符集，这些操作符默认允许溢出，所有这些溢出操作符以“&”开头)</p>
+	<p>When you define your own structures, classes, and enumerations, it can be useful to provide your own implementations of the standard Swift operators for these custom types. Swift makes it easy to provide tailored implementations of these operators and to determine exactly what their behavior should be for each type you create.(当你定义你自己的类、结构体、枚举时，提供这些操作符的你自己的实现将非常有用，Swift使得订制这些操作符的实现，以及决定到底对于特定的类型需要什么样的行为变得容易)</p>
+	<p>You’re not limited to the predefined operators. Swift gives you the freedom to define your own custom infix, prefix, postfix, and assignment operators, with custom precedence and associativity values. These operators can be used and adopted in your code like any of the predefined operators, and you can even extend existing types to support the custom operators you define.(而且并不局限于使用Swift预定义的操作符。Swift让你自由定义你自己的中缀、前缀、后缀、赋值操作符，并允许自定义优先级和关联值。你可以在代码中像使用其他预定的的操作符一样使用这些操作符。甚至你可以扩展已有类型(Type)来支持你自定义的操作符)</p>
+<h3>Bitwise Operators(按位操作符)</h3>
+<p>Bitwise operators enable you to manipulate the individual raw data bits within a data structure. They are often used in low-level programming, such as graphics programming and device driver creation. Bitwise operators can also be useful when you work with raw data from external sources, such as encoding and decoding data for communication over a custom protocol.(按位运算符让你操作某个数据结构中每个原生数据位。他们通常用于底层编程，处理来自外部的原生数据时按位操作符同样有用，例如基于自定义协议的通讯中的编码、解码)</p>
+<h4>Bitwise NOT Operator(按位取反(~)))</h4>	
+<pre><code>
+let initialBits: UInt8 = 0b00001111<br>
+let invertedBits = ~initialBits  // equals 11110000<br>
+</code></pre>
+<h4>Bitwise AND Operator(按位与(&))</h4>		
+<pre><code>
+let firstSixBits: UInt8 = 0b11111100<br>
+let lastSixBits: UInt8  = 0b00111111<br>
+let middleFourBits = firstSixBits & lastSixBits  // equals 00111100<br>
+</code></pre>
+<h4>Bitwise OR Operator(按位或(|))</h4>
+<pre><code>
+let someBits: UInt8 = 0b10110010<br>
+let moreBits: UInt8 = 0b01011110<br>
+let combinedbits = someBits | moreBits  // equals 11111110<br>
+</code></pre>
+<h4>Bitwise XOR Operator(异或( “exclusive OR operator”)(^))</h4>
+<pre><code>
+let firstBits: UInt8 = 0b00010100<br>
+let otherBits: UInt8 = 0b00000101<br>
+let outputBits = firstBits ^ otherBits  // equals 00010001<br>
+</code></pre>
+<h4>Bitwise Left and Right Shift Operators(按位左移(<<)、右移(>>))</h4>
+<h5>Shifting Behavior for Unsigned Integers(无符整型的位移行为)</h5>
+<ul>
+	<li>Existing bits are moved to the left or right by the requested number of places. (当前存在的位往左或右移相应的位数)</li>
+	<li>Any bits that are moved beyond the bounds of the integer’s storage are discarded.(任何移出整型所能表示的最高位的位将被丢掉)</li>
+	<li>Zeros are inserted in the spaces left behind after the original bits are moved to the left or right. (移出留下的空位补0)</li>
+</ul>
+<p>This approach is known as a logical shift.(以上这种移法也叫逻辑位移)</p>
+<pre><code>
+let shiftBits: UInt8 = 4   // 00000100 in binary<br>
+shiftBits << 1             // 00001000<br>
+shiftBits << 2             // 00010000<br>
+shiftBits << 5             // 10000000<br>
+shiftBits << 6             // 00000000<br>
+shiftBits >> 2             // 00000001<br>
+</code></pre>
+<h5>用位移操作在其他数据类型中编码、解码值</h5>
+<pre><code>
+let pink: UInt32 = 0xCC6699<br>
+let redComponent = (pink & 0xFF0000) >> 16    // redComponent is 0xCC, or 204<br>
+let greenComponent = (pink & 0x00FF00) >> 8   // greenComponent is 0x66, or 102<br>
+let blueComponent = pink & 0x0000FF           // blueComponent is 0x99, or 153<br>
+</code></pre>
+		
+<h5>Shifting Behavior for Signed Integers(有符整型的位移行为)</h5>
+<ul>
+	<li>Signed integers use their first bit (known as the sign bit) to indicate whether the integer is positive or negative. A sign bit of 0 means positive, and a sign bit of 1 means negative. (有符整型用它们的第一位(符号位)表明该整型的符号，0代表正数，1代表负数)</li>
+	<li>
+		The remaining bits (known as the value bits) store the actual value. Positive numbers are stored in exactly the same way as for unsigned integers, counting upwards from 0. (其他位存储实际的值，正数的存储和无符整型是一样的，从0开始)
+	</li>
+	<li>Negative numbers, however, are stored differently. They are stored by subtracting their absolute value from 2 to the power of n, where n is the number of value bits. An eight-bit number has seven value bits, so this means 2 to the power of 7, or 128.(负数的存储就不一样了,用绝对值减去2的n次方，n是值位的位数)</li>
+</ul>
+<p>This encoding for negative numbers is known as a two’s complement representation. It may seem an unusual way to represent negative numbers, but it has several advantages. (这种对负数的编码方式也叫二进制补码表示，这看起来可能不太寻常，但这样表示是有其好处的)</p>
+<p>First, you can add -1 to -4, simply by performing a standard binary addition of all eight bits (including the sign bit), and discarding anything that doesn’t fit in the eight bits once you’re done: (首先，你可以把-1和-4相加的时候，连同符号为执行简单的标准二进制加法(满二进一)即可)</p>
+<p>Second, the two’s complement representation also lets you shift the bits of negative numbers to the left and right like positive numbers, and still end up doubling them for every shift you make to the left, or halving them for every shift you make to the right. To achieve this, an extra rule is used when signed integers are shifted to the right: When you shift signed integers to the right, apply the same rules as for unsigned integers, but fill any empty bits on the left with the sign bit, rather than with a zero. (其次，二进制补码表示能让你对负数像正数一样左右移位，并且向左移动一位值加倍，向右移动一位值减半，就像我们熟悉的十进制一样，为了达到这一目的，有符整型在右移的时候需要遵守这样一条规则：右移时除了用符号位补全（而不是0,这就保证了移位时不改变其符号）外,其余和无符整型的移位规则相同)</p>
+<h3>Overflow Operators(溢出操作符)</h3>
+<p>If you try to insert a number into an integer constant or variable that cannot hold that value, by default Swift reports an error rather than allowing an invalid value to be created. This behavior gives extra safety when you work with numbers that are too large or too small.(如果你试图把一个数放在一个超出其所能存储的值的变量或常量中，默认情况下Swift会报错，因为这个值必然是无效的，这一行为让你在处理特别大或特别小的数字是更加安全)</p>
+<pre><code>
+var potentialOverflow = Int16.max<br>
+// potentialOverflow equals 32767, which is the maximum value an Int16 can hold<br>
+potentialOverflow += 1<br>
+// this causes an error<br>
+</code></pre>
+<p>Providing error handling when values get too large or too small gives you much more flexibility when coding for boundary value conditions.(当值太大或太小时提供异常处理让你在处理边界条件时更加灵活)</p>
+<p>However, when you specifically want an overflow condition to truncate the number of available bits, you can opt in to this behavior rather than triggering an error. Swift provides three arithmetic overflow operators that opt in to the overflow behavior for integer calculations. These operators all begin with an ampersand (&): (然而当你想对某个溢出条件进行截断而不是引发一个错误时，你可以用Swift提供的三种溢出操作符来达到目的)</p>
+<ul>
+	<li>Overflow addition (&+) </li>
+	<li>Overflow subtraction (&-)</li>
+	<li>Overflow multiplication (&*)</li>
+</ul>
+<h4>Value Overflow(值溢出)</h4>
+<p>Numbers can overflow in both the positive and negative direction. (数字存在正向溢出和负向溢出两种情况)</p>
+<pre><code>
+var unsignedOverflow = UInt8.max<br>
+// unsignedOverflow equals 255, which is the maximum value a UInt8 can hold<br>
+unsignedOverflow = unsignedOverflow &+ 1//正向溢出<br>
+// unsignedOverflow is now equal to 0<br>
+
+
+var unsignedOverflow = UInt8.min<br>
+// unsignedOverflow equals 0, which is the minimum value a UInt8 can hold<br>
+unsignedOverflow = unsignedOverflow &- 1<br>//负向溢出
+// unsignedOverflow is now equal to 255<br>
+</code></pre>
+<p>For both signed and unsigned integers, overflow in the positive direction wraps around from the maximum valid integer value back to the minimum, and overflow in the negative direction wraps around from the minimum value to the maximum.(无论是有符整型还是无符整型，正向溢出将使值回到最小值，负向溢出将使值达到最大值)</p>
+<h3>Precedence and Associativity(优先级和相关性)</h3>
+<p>Operator precedence gives some operators higher priority than others; these operators are applied first.(优先级就不多说了)</p>
+<p>Operator associativity defines how operators of the same precedence are grouped together—either grouped from the left, or grouped from the right. Think of it as meaning “they associate with the expression to their left,” or “they associate with the expression to their right.” (操作符的相关性定义了优先级相同的操作符如何组合在一起，从左至右还是从右至左，可以这么想：它们和表达式的左边或右边相关)</p>
+<h3>Operator Methods(操作符方法)</h3>
+<p>Classes and structures can provide their own implementations of existing operators. This is known as overloading the existing operators. (对于已经存在的操作符，类和结构体能提供它们自己的实现，这也叫操作符的重载)</p>
+<pre><code>
+struct Vector2D {<br>
+	var x = 0.0, y = 0.0<br>
+}<br>
+ 
+extension Vector2D {<br>
+	static func + (left: Vector2D, right: Vector2D) -> Vector2D {<br>
+		return Vector2D(x: left.x + right.x, y: left.y + right.y)<br>
+	}<br>
+}<br>
+</code></pre>
+<h3>Prefix and Postfix Operators(前缀和后缀操作符)</h3>
+<p>Classes and structures can also provide implementations of the standard unary operators. Unary operators operate on a single target. They are prefix if they precede their target (such as -a) and postfix operators if they follow their target (such as b!). (类和结构体也提供了对标准一元运算符(-,!...)的实现)</p>
+<pre>
+	<code>
+extension Vector2D {<br>
+	static prefix func - (vector: Vector2D) -> Vector2D {<br>
+		return Vector2D(x: -vector.x, y: -vector.y)<br>
+	}<br>
+}<br>
+	</code>
+</pre>
+<h3>Compound Assignment Operators(混合赋值运算符+=...)</h3>
+<pre>
+<code>
+extension Vector2D {<br>
+	static func += (left: inout Vector2D, right: Vector2D) {<br>
+		left = left + right<br>
+	}<br>
+}<br>
+</code>
+</pre>
+<h3>Equivalence Operators(相等运算符==)</h3>
+<pre>
+	<code>
+
+
+extension Vector2D {<br>
+		static func == (left: Vector2D, right: Vector2D) -> Bool {<br>
+			return (left.x == right.x) && (left.y == right.y)<br>
+		}<br>
+		static func != (left: Vector2D, right: Vector2D) -> Bool {<br>
+			return !(left == right)<br>
+		}<br>
+	}<br>
+
+
+	</code>
+</pre>
+<h3>Custom Operators(自定义操作符)</h3>
+<pre>
+	<code>
+extension Vector2D {<br>
+	static prefix func +++ (vector: inout Vector2D) -> Vector2D {<br>
+		vector += vector<br>
+		return vector<br>
+	}<br>
+}<br>
+ 
+var toBeDoubled = Vector2D(x: 1.0, y: 4.0)<br>
+let afterDoubling = +++toBeDoubled<br>
+// toBeDoubled now has values of (2.0, 8.0)<br>
+// afterDoubling also has values of (2.0, 8.0)<br>
+
+
+	</code>
+</pre>
+<h3>Precedence for Custom Infix Operators(自定义中缀运算符的优先级)</h3>
+<p>Custom infix operators each belong to a precedence group. A precedence group specifies an operator’s precedence relative to other infix operators, as well as the operator’s associativity. (每个自定义中缀运算符都属于一个优先级组)</p>
+<p>A custom infix operator that is not explicitly placed into a precedence group is given a default precedence group with a precedence immediately higher than the precedence of the ternary conditional operator.(一个自定义的中缀运算符，如果没有显示指定优先级组，那么个它将默认属于一个高于三元条件运算符优先级的优先级组)</p>
+<pre><code>
+infix operator +-: AdditionPrecedence//指定优先级组<br>
+extension Vector2D {<br>
+	static func +- (left: Vector2D, right: Vector2D) -> Vector2D {<br>
+		return Vector2D(x: left.x + right.x, y: left.y - right.y)<br>
+	}<br>
+}<br>
+let firstVector = Vector2D(x: 1.0, y: 2.0)<br>
+let secondVector = Vector2D(x: 3.0, y: 4.0)<br>
+let plusMinusVector = firstVector +- secondVector<br>
+// plusMinusVector is a Vector2D instance with values of (4.0, -2.0)<br>
+</code></pre>
+	</body>
+</html>

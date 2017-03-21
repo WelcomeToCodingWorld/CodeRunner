@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>The Structure of an App</title>
+	</head>
+	<body>
+		
+<pre><code>
+#import <UIKit/UIKit.h><br>
+#import "AppDelegate.h"<br>
+int main(int argc, char * argv[])<br>
+
+{<br>
+
+	@autoreleasepool {<br>
+
+		return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));<br>
+
+	}<br>
+
+}<br>
+</code></pre>
+<p>The entry point for every C-based app is the main function and iOS apps are no different.(每一个基于C的app的入口都是main函数，Objective-C也不例外，Xcode会自动为我们创建这个main哈娜鼠)</p>
+<p>The only thing to mention about the main function is that its job is to hand control off to the UIKit framework. The UIApplicationMain function handles this process by creating the core objects of your app, loading your app’s user interface from the available storyboard files, calling your custom code so that you have a chance to do some initial setup, and putting the app’s run loop in motion. The only pieces that you have to provide are the storyboard files and the custom initialization code.(关于main函数唯一需要提的是：它的主要工作是把控制权交给UIKit框架。UIApplicationMaint函数是这样处理这一过程的：创建app的核心对象，从storyboard文件加载app的用户界面，调用程序猿的自定义代码来进一步做一些初始化设置，然后开始app的run loop,那么程序需要做到就是提供storyboard文件和一些初始化代码)</p>
+
+<br><br>
+<h3>The Structure of an App</h3>
+<br>
+<p>During startup, the UIApplicationMain function sets up several key objects and starts the app running. At the heart of every iOS app is the UIApplication object, whose job is to facilitate the interactions between the system and other objects in the app.(在app启动时，UIApplicationMain函数创建了一些关键对象，然后运行app。在每一个iOSapp中，UIApplication对象都是其核心，UIApplication对象的主要作用就是促进系统和其他对象之间的交互。)</p>
+<p>The first thing to notice is that iOS apps use a model-view-controller architecture. This pattern separates the app’s data and business logic from the visual presentation of that data. This architecture is crucial to creating apps that can run on different devices with different screen sizes. (第一件要提到的事就是，iOS app用M-V-C的架构。这种设计模式把app的数据和业务逻辑与app的表现层分离开来。这种模式对于设计在多种不同尺寸的设备上运行的app是非常有用的)</p>
+<br>
+<h3>The role of objects in an iOS app(iOS app中对象的作用或扮演的角色)</h3>
+<ul><li>UIApplication</li></ul>
+<p>
+	The UIApplication object manages the event loop and other high-level app behaviors. It also reports key app transitions and some special events (such as incoming push notifications) to its delegate, which is a custom object you define. Use the UIApplication object as is—that is, without subclassing. (管理事件循环和其他高层的app行为。将关键的app状态切换或转场和一些特殊事件(如推送)报告给它的代理)
+</p>
+<ul><li>app delegate objects</li></ul>
+<p>
+	The app delegate is the heart of your custom code. This object works in tandem with the UIApplication object to handle app initialization, state transitions, and many high-level app events. This object is also the only one guaranteed to be present in every app, so it is often used to set up the app’s initial data structures.(app delegate是自定义代码的核心对象。它和UIApplication对象一起合作来处理app初始化，状态切换以及许多高层的app事件)
+</p>
+<ul><li>Documents and data model objects(文档和数据模型对象)</li></ul>
+<p>
+	Data model objects store your app’s content and are specific to your app. For example, a banking app might store a database containing financial transactions, whereas a painting app might store an image object or even the sequence of drawing commands that led to the creation of that image. (In the latter case, an image object is still a data object because it is just a container for the image data.)(数据模型对象存储了app的内容，并且是特定于app的。例如一个银行app可能存储一个包含金融交易的数据库，而一个绘画app可能存储图片对象或甚至是一系列的让你创建图画的绘画命令)
+</p>
+<p>Apps can also use document objects (custom subclasses of UIDocument) to manage some or all of their data model objects. Document objects are not required but offer a convenient way to group data that belongs in a single file or file package. For more information about documents, see Document-Based App Programming Guide for iOS. (app也能创建文档对象(UIDocument类的子类)来管理它部分或全部的数据模型对象，文档对象并不是必需的，但是它提供了一种将数据组织为一个单独的文件或文件包的方便方法)</p>
+<ul><li>View controller objects</li></ul>
+<p>
+	View controller objects manage the presentation of your app’s content on screen. A view controller manages a single view and its collection of subviews. When presented, the view controller makes its views visible by installing them in the app’s window.(管理app的屏幕上内容的呈现。一个view controller管理一个视图以及该视图的子视图集。当要把视图呈现给用户时，view controller把它管理的视图安装到app的window上)
+</p>
+<p>The UIViewController class is the base class for all view controller objects. It provides default functionality for loading views, presenting them, rotating them in response to device rotations, and several other standard system behaviors. UIKit and other frameworks define additional view controller classes to implement standard system interfaces such as the image picker, tab bar interface, and navigation interface.(UIViewController是所有view controller 对象的基类，它为视图的加载，呈现，随设备的旋转而旋转以及其他的一些标准系统行为提供了默认的实现，UIKit和其他的一些框架定义了其他的view controller类来实现如image picker，tab bar,navigation等标准系统界面)</p>
+<ul><li>UIWindow object</li></ul>
+<p>
+	A UIWindow object coordinates the presentation of one or more views on a screen. Most apps have only one window, which presents content on the main screen, but apps may have an additional window for content displayed on an external display.(UIWindow对象协调一个或多个视图在屏幕上的呈现。大多数app都只有一个window，来把内容呈现给主屏幕，但是app可能还会有另外的window来把内容展现在外部的显示器上)</p>
+
+	<p>To change the content of your app, you use a view controller to change the views displayed in the corresponding window. You never replace the window itself.(为了改变app的内容，用view controller来改变呈现在对应window上的视图，而从来都不会替换window)</p>
+
+	<p>In addition to hosting views, windows work with the UIApplication object to deliver events to your views and view controllers.(除了管理视图，window还协同UIApplication把事件发送给你的视图和控制器)
+</p>
+<ul><li>views,controls,layer objects</li></ul>
+<p>Views and controls provide the visual representation of your app’s content. A view is an object that draws content in a designated rectangular area and responds to events within that area. Controls are a specialized type of view responsible for implementing familiar interface objects such as buttons, text fields, and toggle switches. (视图和控件提供了app内容的视觉呈现，view把内容画在设计好的方形区域内，并响应那个区域的事件。控件时一类特殊类型的视图，它的职责是实现例如按钮，文本输入框，开关按钮等熟悉的系统界面)</p>
+<br>
+<p>What distinguishes one iOS app from another is the data it manages (and the corresponding business logic) and how it presents that data to the user. Most interactions with UIKit objects do not define your app but help you to refine its behavior. For example, the methods of your app delegate let you know when the app is changing states so that your custom code can respond appropriately.(一个app和另一个app的区别是它管理的数据及相关的业务逻辑，以及它把数据呈现给用户的方式，大多数和UIKit对象的交互没有定义你的app，但是帮助你精炼了这些行为。例如app delegate的方法让你知道app什么时候切换状态，以便你的代码能做出合适的回应)</p>
+<h3>The Main Run Loop</h3>
+<p>An app’s main run loop processes all user-related events. The UIApplication object sets up the main run loop at launch time and uses it to process events and handle updates to view-based interfaces. As the name suggests, the main run loop executes on the app’s main thread. This behavior ensures that user-related events are processed serially in the order in which they were received.(app的主运行环处理所有用户相关的事件。UIApplication在app启动时设置了主运行环，并用它来处理事件，更新基于视图的界面，顾名思义，主运行环在app的主线程执行，这种行为确保了用户相关的事件按接受到它们的顺序串行处理)</p>
+<div><a href= ""></a></div>
+<p>As the user interacts with a device, events related to those interactions are generated by the system and delivered to the app via a special port set up by UIKit. Events are queued internally by the app and dispatched one-by-one to the main run loop for execution. The UIApplication object is the first object to receive the event and make the decision about what needs to be done. A touch event is usually dispatched to the main window object, which in turn dispatches it to the view in which the touch occurred. Other events might take slightly different paths through various app objects.(当用户和设备交互时，系统就产生了与这些交互相关的事件，并把它们通过UIKit设置的特殊端口传递给app并一个个派遣给主运行环来执行，UIApplication是第一个接受到某事件的对象，然后它会决定需要做什么，随后把该事件派遣给事件的直接对象(比如触摸某个视图产生的touch事件，该视图就是直接对象，其他事件的路由可能应不同的app对象而稍有不同))</p>
+<p>Many of these event types are delivered using the main run loop of your app, but some are not. Some events are sent to a delegate object or are passed to a block that you provide. (大多数事件类型使用主运行环传递的，但是有些事件并不是。有些事件被发送给你提供的一个代理或block)</p>
+<p>Most events target a specific responder object but can be passed to other responder objects (via the responder chain) if needed to handle an event. For example, a view that does not handle an event can pass the event to its superview or to a view controller(大多数事件是有一个特定处理目标的，但是也可以传递给其他的responder对象。例如，一个视图并没有处理它的事件，那么该事件就可以传递给它的父视图或view controller)</p>
+<p>Touch events occurring in controls (such as buttons) are handled differently than touch events occurring in many other types of views. There are typically only a limited number of interactions possible with a control, and so those interactions are repackaged into action messages and delivered to an appropriate target object.(控件上的触摸事件和其他类型的视图上的触摸事件的处理处方式不同。一个控件有它特定的有限的几种交互，并且这些交互被重新包装成动作消息传递给合适的target)</p>
+	</body>
+</html>

@@ -1,0 +1,25 @@
+javaScript 诞生于1995年，用于客户端的交互。(Netscape)
+Ajax 诞生于2005年，用于客户端局部刷新
+Internet服务通过多种不同的协议来实现
+http,ftp等只是一些应用层的协议，与计算机之间的互联没有关系。
+WebBased-ApplicationServer
+Html5  finalized in the year 2011.
+Server:The provider of the resources or services
+Client:The requester of the resources or services
+The Client initiate the communication sessions with servers which await incoming request;
+
+A Web Server provides only the Http content(web page);
+A Application Server uses various protocols;
+
+A shared resource  may be any of the server computer's software and electronic components from programs and data to processors and storage devices;
+
+The sharing of resources of a server constitutes  a service;
+
+Servers are classified by the services they provide.For example, a web server serves web pages and a file server serves computer files;
+
+When a bank customer accesses online banking services with a web browser (the client), the client initiates a request to the bank's web server. The customer's login credentials may be stored in a database, and the web server accesses the database server as a client. An application server interprets the returned data by applying the bank's business logic, and provides the output to the web server. Finally, the web server returns the result to the client web browser for display.
+
+
+sofware framework, software architecture ,Library(computer science)
+
+

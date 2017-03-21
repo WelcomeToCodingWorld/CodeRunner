@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>ViewController</title>
+	</head>
+	<body>
+		<p>In almost every way, a container view controller is like any other content view controller in that it manages a root view and some content. The difference is that a container view controller gets part of its content from other view controllers. The content it gets is limited to the other view controllers’ views, which it embeds inside its own view hierarchy. The container view controller sets the size and position of any embedded views, but the original view controllers still manage the content inside those views. (在几乎所有方面，一个container view controller和其他content view controller是一样的，它管理者一个root view和一些内容。不同的是，一个container view controller也从其他view controller获得部分内容。它所获得的内容仅限于其他view controllers的views，它把这些views嵌入它自己的view层。一个container view controller设置所有嵌入其view层的views的位置和大小，但是这些view的源view controller仍旧管理者它们的内容)</p>
+		<p>When designing your own container view controllers, always understand the relationships between the container and contained view controllers. The relationships of the view controllers can help inform how their content should appear onscreen and how your container manages them internally. During the design process, ask yourself the following questions: (在设计自己的container view controller时，总是要理解container和contained view controllers的关系。)</p>
+		<p>The implementation of a container view controller is relatively straightforward after you have defined the roles of the various objects. The only requirement from UIKit is that you establish a formal parent-child relationship between the container view controller and any child view controllers. The parent-child relationship ensures that the children receive any relevant system messages. Apart from that, most of the real work happens during the layout and management of the contained views, which is different for each container. You can place views anywhere in your container’s content area and size those views however you want. You can also add custom views to the view hierarchy to provide decoration or to aid in navigation.(你定义好各种不同objects的角色之后，实现一个container view controller也就直截了当了。对UIKit的唯一要求是，你在container view controller和其他任何一个child view controller之间建立了一种parent-child关系。这种parent-child关系保证了children接收任何相关的系统消息。除此之外，大多数实际地工作发生在布局和管理contained view期间，这对于每个container是不一样的。你可以把这些views放在container中的任何地方，并可以在任何你想修改的时候修改它们的size，你也可以提供自定义view作为装饰或作为导航的辅助)
+</p>
+	</body>
+</html>

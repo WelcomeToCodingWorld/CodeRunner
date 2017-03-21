@@ -1,0 +1,2 @@
+Whistler	Gwen	bird	m	1970-12-09	\N
+Puffball	Diane	hamster	f	1993-03-30	Null

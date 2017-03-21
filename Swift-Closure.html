@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<p>Closures are self-contained blocks of functionality that can be passed around and used in your code. Closures in Swift are similar to blocks in C and Objective-C and to lambdas in other programming languages. (Swift中的Closure类似于C和Objective-C中的Block,以及其他语言中的lambda，是一个自包含的功能块)</p>
+		<p>Closures can capture and store references to any constants and variables from the context in which they are defined. This is known as closing over those constants and variables. Swift handles all of the memory management of capturing for you. (闭包可以从定义任何常量和变量的上下文中捕获和存储对他们的引用,这叫做closing over变量或常量)</p>
+		<p>Global and nested functions, as introduced in Functions, are actually special cases of closures. Closures take one of three forms: (全局和嵌套函数实际上都是特殊的闭包，闭包有以下三种情况：)<br>
+		<ul>
+			<li>Global functions are closures that have a name and do not capture any values.(全局函数是命名了的闭包，并且不捕获任何值)</li>
+			<li>Nested functions are closures that have a name and can capture values from their enclosing function. (嵌套函数是命了名的闭包，并且可以捕获嵌套它的函数内部的值)</li>
+			<li>Closure statements are unnamed closures written in a lightweight syntax that can capture values from their surrounding context. (这里所介绍的闭包是语法轻量的未命名的闭包，可以从它周围的上下文中捕获值)</li>
+		</ul>
+		</p>
+		<p>Swift’s closure statements have a clean, clear style, with optimizations that encourage brief, clutter-free syntax in common scenarios. These optimizations include: (Swift中的闭包表达式简洁清晰,这对于鼓励语法简洁不杂乱的很多常见的场景来说有如下优势：)<br>
+			<ul>
+				<li>Inferring parameter and return value types from context(从上下文中国年推断参数和返回值的类型) </li>
+				<li>Implicit returns from single-statement closures (从一个闭包表达式中隐式返回)</li>
+				<li>Shorthand argument names (简洁的参数名)</li>
+				<li>Trailing closure syntax (尾闭包语法)</li>
+			</ul>
+		</p>
+		<p>Nested functions, as introduced in Nested Functions, are a convenient means of naming and defining self-contained blocks of code as part of a larger function. However, it is sometimes useful to write shorter versions of function-like constructs without a full declaration and name. This is particularly true when you work with functions or methods that take functions as one or more of their arguments. (命名和定义自包含代码块，作为一个庞大的函数的一部分，嵌套函数是一种方便的方式)</p>
+		<p>Closure statements are a way to write inline closures in a brief, focused syntax. Closure statements provide several syntax optimizations for writing closures in a shortened form without loss of clarity or intent. The closure statement examples below illustrate these optimizations by refining a single example of the sorted(by:) method over several iterations, each of which expresses the same functionality in a more succinct way.
+(闭包表达式一种写内连闭包的简洁而集中的方式，闭包表达式提供了几种用简短而不失清晰和目的性的方式写闭包格式)</p>
+<h3>Example:The Sorted Method</h3>
+<p>The sorted(by:) method accepts a closure that takes two arguments of the same type as the array’s contents, and returns a Bool value to say whether the first value should appear before or after the second value once the values are sorted. The sorting closure needs to return true if the first value should appear before the second value, and false otherwise. (sorted(by:)函数的参数是一个闭包，这个闭包有两个和它所要排序的数组的元素类型相同的参数，并返回一个表示第一参数应该排在第二个参数前边还是后边的bool值，如果第一个参数要排在第二个参数前边，那么应该返回true，否则要返回false)</p>
+<h5>函数语法</h5>
+<pre>
+	<code>
+let names = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]<br>
+
+
+func backward(_ s1: String, _ s2: String) -> Bool {<br>
+	return s1 > s2<br>
+}<br>
+var reversedNames = names.sorted(by: backward)<br>
+// reversedNames is equal to ["Ewa", "Daniella", "Chris", "Barry", "Alex"]<br>
+</code></pre>
+<h5>闭包语法</h5>
+<pre><code>
+{ (parameters) -> return type in<br>
+	statements<br>
+}<br>
+//(同样参数可以是in-out类型的)<br>
+//应该注意到其参数和返回类型是写在{}内部的，关键字in后边才是闭包体
+
+reversedNames = names.sorted(by: { (s1: String, s2: String) -> Bool in<br>
+	return s1 > s2<br>
+})<br>
+</code></pre>
+
+<h4>从上下文中推断类型</h4>
+<p>Because the sorting closure is passed as an argument to a method, Swift can infer the types of its parameters and the type of the value it returns. The sorted(by:) method is being called on an array of strings, so its argument must be a function of type (String, String) -> Bool. This means that the (String, String) and Bool types do not need to be written as part of the closure statement’s definition. Because all of the types can be inferred, the return arrow (->) and the parentheses around the names of the parameters can also be omitted: (由于上面的排序闭包是作为参数传递的，因此Swift能推断其参数和返回值的类型。sorted(by:)方法是被一个字符串数组调用的，那么它的参数必须是(String, String) -> Bool类型的，就是说用不着显式指明其参数类型，由于所有类型都可以推断出来，那么参数和返回值之间的尖头以及参数列表所在的括号也可以省略掉了)</p>
+<pre><code>
+reversedNames = names.sorted(by: { s1, s2 in return s1 > s2 } )<br>	
+</code></pre>
+
+<p>It is always possible to infer the parameter types and return type when passing a closure to a function or method as an inline closure statement. As a result, you never need to write an inline closure in its fullest form when the closure is used as a function or method argument. (当把一个闭包用内连闭包的方式当做参数传递给一个函数是，这个闭包的参数和返回值的类型总是可以推断出来的，因此这种情况下，你永远不需要用完全格式写这个闭包)</p>
+<p>Nonetheless, you can still make the types explicit if you wish, and doing so is encouraged if it avoids ambiguity for readers of your code. In the case of the sorted(by:) method, the purpose of the closure is clear from the fact that sorting is taking place, and it is safe for a reader to assume that the closure is likely to be working with String values, because it is assisting with the sorting of an array of strings.(尽管如此如果你愿意你也可以显式去指定类型，并且如果这样能够避免让你代码的读者产生混淆或不清不楚的感觉的话，我们鼓励这样去做)
+</p>
+<h4>Implicit Returns from Single-statement Closures(从闭包隐式返回)</h4>
+<p>Single-statement closures can implicitly return the result of their single statement by omitting the return keyword from their declaration, as in this version of the previous example: (单行表达式能够省略return关键字而隐式返回这个表达式的值)</p>
+
+<pre><code>
+reversedNames = names.sorted(by: { s1, s2 in s1 > s2 } )<br>	
+</code></pre>
+
+<p>Here, the function type of the sorted(by:) method’s argument makes it clear that a Bool value must be returned by the closure. Because the closure’s body contains a single statement (s1 > s2) that returns a Bool value, there is no ambiguity, and the return keyword can be omitted.(在这里，sorted(by:)函数的参数必须返回一个Bool值，而闭包体中包含一个返回布尔值的逻辑表达式，这没有什么不清楚的，因此return关键字可以省略)
+</p>
+<h4>Shorthand Argument Names(简化参数名)</h4>
+<p>Swift automatically provides shorthand argument names to inline closures, which can be used to refer to the values of the closure’s arguments by the names $0, $1, $2, and so on. (Swift自动为内连闭包提供了简化的参数名，能够用$0,$1,$2等等来引用闭包参数的值)</p>
+
+<pre>
+	<code>
+reversedNames = names.sorted(by: { $0 > $1 } )<br>
+
+//Here, $0 and $1 refer to the closure’s first and second String arguments.(这里$0和$1就引用了闭包的第一、第二个String类型的参数)<br>
+	</code>
+</pre>
+<h4>Operator Methods(操作符方法)</h4>
+<p>
+	There’s actually an even shorter way to write the closure statement above. Swift’s String type defines its string-specific implementation of the greater-than operator (>) as a method that has two parameters of type String, and returns a value of type Bool. This exactly matches the method type needed by the sorted(by:) method. Therefore, you can simply pass in the greater-than operator, and Swift will infer that you want to use its string-specific implementation: (上面的闭包表达式甚至有更简单的写法。String类型有一个特定于String类型的">"操作符方法实现，这个实现接受两个String类型的参数，返回一个bool值，因此你可以只传这个“>”操作符，Swift能推断出你要用这个方法实现)
+</p>
+<pre>
+	<code>
+reversedNames = names.sorted(by: >)<br>
+	</code>
+</pre>
+<h3>Trailing Closures(尾闭包)</h3>
+<p>
+	If you need to pass a closure statement to a function as the function’s final argument and the closure statement is long, it can be useful to write it as a trailing closure instead. A trailing closure is written after the function call’s parentheses, even though it is still an argument to the function. When you use the trailing closure syntax, you don’t write the argument label for the closure as part of the function call.(如果你要把一个闭包作为一个函数的最后一个参数传递，并且这个闭包表达式很长，那么把它写成尾闭包的就很好。尾闭包写在函数调用的参数列表括号后边，尽管它也只是一个参数，当你用尾闭包语法的时候不用把这个闭包的参数标签作为函数调用的一部分)
+</p>
+<pre><code>
+func someFunctionThatTakesAClosure(closure: () -> Void) {<br>
+	// function body goes here<br>
+}<br>
+ 
+// Here's how you call this function without using a trailing closure:(不用尾闭包的调用方式)<br>
+ 
+someFunctionThatTakesAClosure(closure: {<br>
+	// closure's body goes here<br>
+})<br>
+ 
+// Here's how you call this function with a trailing closure instead:（用尾闭包的调用方式)<br>
+someFunctionThatTakesAClosure() {<br>
+	// trailing closure's body goes here<br>
+}<br>
+</code></pre>
+<p>
+	he string-sorting closure from the Closure statement Syntax section above can be written outside of the sorted(by:) method’s parentheses as a trailing closure:(上面的String排序闭包就能写成尾闭包的调用方式)
+</p>
+<pre><code>
+reversedNames = names.sorted() { $0 > $1 }<br>
+</code></pre>
+<p>If a closure statement is provided as the function or method’s only argument and you provide that statement as a trailing closure, you do not need to write a pair of parentheses () after the function or method’s name when you call the function: (如果一个闭包表达式作为一个函数仅有的一个参数，你可以用尾闭包的方式调用，并且不用写括号)</p>
+<pre><code>
+reversedNames = names.sorted { $0 > $1 }
+</code></pre>
+<p>
+	Trailing closures are most useful when the closure is sufficiently long that it is not possible to write it inline on a single line. As an example, Swift’s Array type has a map(_:) method which takes a closure statement as its single argument. The closure is called once for each item in the array, and returns an alternative mapped value (possibly of some other type) for that item. The nature of the mapping and the type of the returned value is left up to the closure to specify. (当一个闭包足够长，一行根本写不下的时候，尾闭包就很有用。下面是Array的map(_:)方法的一个例子,这个方法接受一个闭包作为它唯一的参数，数组中每个元素会调一次这个闭包，并返回一个该元素的映射值)
+</p>
+<pre><code>
+let digitNames = [<br>
+	0: "Zero", 1: "One", 2: "Two",   3: "Three", 4: "Four",<br>
+	5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"<br>
+]<br>
+let numbers = [16, 58, 510]<br>
+
+
+let strings = numbers.map { (number) -> String in<br>
+	var number = number<br>
+	var output = ""<br>
+	repeat {<br>
+		output = digitNames[number % 10]! + output<br>
+		number /= 10<br>
+	} while number > 0<br>
+	return output<br>
+}<br>
+// strings is inferred to be of type [String]<br>
+// its value is ["OneSix", "FiveEight", "FiveOneZero"]<br>
+</code></pre>
+<h3>Capturing Values(捕获值)</h3>
+<p>
+	In Swift, the simplest form of a closure that can capture values is a nested function, written within the body of another function. A nested function can capture any of its outer function’s arguments and can also capture any constants and variables defined within the outer function.(在Swift中，捕获值的最简单的方式是函数嵌套，一个嵌套的函数能捕获它所嵌套在的函数的参数并能捕获该函数中所有的常量和变量)
+</p>
+<pre><code>
+func makeIncrementer(forIncrement amount: Int) -> () -> Int {<br>
+	var runningTotal = 0<br>
+	func incrementer() -> Int {<br>
+		runningTotal += amount<br>
+		return runningTotal<br>
+	}<br>
+	return incrementer<br>
+}<br>
+</code></pre>
+<p>The incrementer() function doesn’t have any parameters, and yet it refers to runningTotal and amount from within its function body. It does this by capturing a reference to runningTotal and amount from the surrounding function and using them within its own function body. Capturing by reference ensures that runningTotal and amount do not disappear when the call to makeIncrementer ends, and also ensures that runningTotal is available the next time the incrementer function is called. (上面嵌套的函数incrementer()没有参数，并在它函数体内从嵌套它的函数的函数体中捕获并引用了runningTotal和amount两个参数)</p>
+<pre><code>
+let incrementByTen = makeIncrementer(forIncrement: 10)<br>
+incrementByTen()<br>
+// returns a value of 10<br>
+incrementByTen()<br>
+// returns a value of 20<br>
+incrementByTen()<br>
+// returns a value of 30<br>
+
+
+
+let incrementBySeven = makeIncrementer(forIncrement: 7)<br>
+incrementBySeven()<br>
+// returns a value of 7<br>
+</code></pre>
+<p>Calling the original incrementer (incrementByTen) again continues to increment its own runningTotal variable, and does not affect the variable captured by incrementBySeven:(现在继续调用incrementByTen)</p>
+<pre>
+	<code>
+incrementByTen()
+	// returns a value of 40
+//注意到将继续从它自己的runningTotal往上加，而不受incrementBySeven:捕获到的值的影响
+	</code>
+</pre>
+<p>
+If you assign a closure to a property of a class instance, and the closure captures that instance by referring to the instance or its members, you will create a strong reference cycle between the closure and the instance. Swift uses capture lists to break these strong reference cycles. (如果把一个闭包赋给一个类实例的属性，并且这个闭包通过引用这个实例或者它的成员捕获了这个实例，那么将在这个闭包和它所捕获的实例之间将产生一个强循环引用，至于如何避免这种情况，将在其他章节讲到)	
+</p>
+<h3>Closures Are Reference Types(闭包是引用类型)</h3>
+<p>In the example above, incrementBySeven and incrementByTen are constants, but the closures these constants refer to are still able to increment the runningTotal variables that they have captured. This is because functions and closures are reference types. (在上面的例子中incrementBySeven和incrementByTen都是常量，但是这些常量所引用的闭包仍然能够增加它们所捕获的runningTotal变量的值，这是因为函数和闭包都是引用类型)</p>
+
+<p>Whenever you assign a function or a closure to a constant or a variable, you are actually setting that constant or variable to be a reference to the function or closure. In the example above, it is the choice of closure that incrementByTen refers to that is constant, and not the contents of the closure itself. (不管什么时候你把一个函数或闭包赋给一个变量或常量，你实际上是把那个变量或常量作为那个函数或闭包的一个引用，在上面的例子中，incrementByTen所引用的闭包是常量，而并不是它的内容)</p>
+<p>This also means that if you assign a closure to two different constants or variables, both of those constants or variables will refer to the same closure:(也就是说，如果你把一个闭包赋给了两个不同的常量或变量，那么这些常量或变量将引用着同一个闭包)</p>
+<pre><code>
+let alsoIncrementByTen = incrementByTen<br>
+alsoIncrementByTen()<br>
+// returns a value of 50<br>
+</code></pre>
+<h3>Escaping Closures(实际上就是Objective-C中作为回调的Block,这里应该叫什么，逃逸闭包？)</h3>
+<p>A closure is said to escape a function when the closure is passed as an argument to the function, but is called after the function returns. When you declare a function that takes a closure as one of its parameters, you can write @escaping before the parameter’s type to indicate that the closure is allowed to escape. (当把闭包作为函数参数传入，并且当该函数返回是才调用这个闭包，我们就说着个闭包逃离了这个函数)</p>
+<p>One way that a closure can escape is by being stored in a variable that is defined outside the function. As an example, many functions that start an asynchronous operation take a closure argument as a completion handler. The function returns after it starts the operation, but the closure isn’t called until the operation is completed—the closure needs to escape, to be called later. (让一个闭包能够逃逸的一种方法是把它存储在一个在函数外部定义的变量里，例如许多发起异步操作的函数都有一个闭包作为参数，当这个函数发起异步操作后，就返回了，但是这个闭包知道该异步操作完成后才需要被调用，那么这个闭包就需要逃逸，晚些时候才调用它,可以通过在闭包类型的前面用“@escaping”来表明允许该闭包逃逸)</p>
+<pre><code>
+var completionHandlers: [() -> Void] = []<br>
+func someFunctionWithEscapingClosure(completionHandler: @escaping () -> Void) {<br>
+	completionHandlers.append(completionHandler)<br>
+}<br>
+</code></pre>
+<p>The someFunctionWithEscapingClosure(_:) function takes a closure as its argument and adds it to an array that’s declared outside the function. If you didn’t mark the parameter of this function with @escaping, you would get a compile-time error. (上面这个函数有一个闭包作为它的参数，并把这个闭包添加到了函数外部定义的一个闭包数组里，如果你不用“@escaping”来标注，这里将会产生一个编译时错误)</p>
+<p>Marking a closure with @escaping means you have to refer to self explicitly within the closure. For example, in the code below, the closure passed to someFunctionWithEscapingClosure(_:) is an escaping closure, which means it needs to refer to self explicitly. In contrast, the closure passed to someFunctionWithNonescapingClosure(_:) is a nonescaping closure, which means it can refer to self implicitly. (把一个闭包用“@escaping”标注意味着你不得不在该闭包内显式地引用self)</p>
+<pre><code>
+func someFunctionWithNonescapingClosure(closure: () -> Void) {<br>
+	closure()<br>
+}<br>
+ 
+class SomeClass {<br>
+	var x = 10<br>
+	func doSomething() {<br>
+		someFunctionWithEscapingClosure { self.x = 100 }<br>
+		//显式地引用self<br>
+		someFunctionWithNonescapingClosure { x = 200 }<br>
+		//隐式地引用self<br>
+	}<br>
+}<br>
+
+let instance = SomeClass()<br>
+instance.doSomething()<br>
+print(instance.x)<br>
+// Prints "200"<br>
+	 
+completionHandlers.first?()<br>
+print(instance.x)<br>
+// Prints "100"<br>
+</code></pre>
+<h3>Autoclosures(自动闭包,就像我经常在Objective-C中用AutoLayout布局时为了代码的可读性而把一段代码用“{}”扩起来，Objective-C中是否也起到了延迟执行的作用就不知道了)</h3>
+<p>An autoclosure is a closure that is automatically created to wrap an statement that’s being passed as an argument to a function. It doesn’t take any arguments, and when it’s called, it returns the value of the statement that’s wrapped inside of it. This syntactic convenience lets you omit braces around a function’s parameter by writing a normal statement instead of an explicit closure. (自动闭包是被自动创建的用来wrap一个作为参数传递给函数的表达式。在调用它时不传任何参数，它返回它所包含的表达式的值，这种语法的简化让你可以省略函数参数列表外的括号，写一个正常的表达式而不是一个显式的闭包)</p>
+<p>It’s common to call functions that take autoclosures, but it’s not common to implement that kind of function. For example, the assert(condition:message:file:line:) function takes an autoclosure for its condition and message parameters; its condition parameter is evaluated only in debug builds and its message parameter is evaluated only if condition is false. (调用带自动闭包的函数很常见，但实现这类函数却并不常见，例如assert(condition:message:file:line:)这个函数，它的参数condition和message就各有一个自动闭包，condition只有在编译时才用到，而message只有condition为false时才用到)</p>
+<p>An autoclosure lets you delay evaluation, because the code inside isn’t run until you call the closure. Delaying evaluation is useful for code that has side effects or is computationally expensive, because it lets you control when that code is evaluated. The code below shows how a closure delays evaluation. (一个自动闭包让你延迟执行，因为它所包含的代码只有在你调用该闭包时才会执行，你自己去控制什么时候执行)</p>
+<pre>
+	<code>
+var customersInLine = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]<br>
+print(customersInLine.count)<br>
+// Prints "5"<br>
+ 
+let customerProvider = { customersInLine.remove(at: 0) }<br>
+print(customersInLine.count)<br>
+// Prints "5"<br>
+ 
+print("Now serving \(customerProvider())!")<br>
+// Prints "Now serving Chris!"<br>
+print(customersInLine.count)<br>
+// Prints "4"<br>
+	</code>
+</pre>
+<p>Even though the first element of the customersInLine array is removed by the code inside the closure, the array element isn’t removed until the closure is actually called. If the closure is never called, the statement inside the closure is never evaluated, which means the array element is never removed. Note that the type of customerProvider is not String but () -> String—a function with no parameters that returns a string.(上边即使customersLine数组的第一个元素在自动闭包中被移除了，但是只有闭包真正被调用时，元素才被移除)</p>
+<p>The serve(customer:) function in the listing above takes an explicit closure that returns a customer’s name. The version of serve(customer:) below performs the same operation but, instead of taking an explicit closure, it takes an autoclosure by marking its parameter’s type with the @autoclosure attribute. Now you can call the function as if it took a String argument instead of a closure. The argument is automatically converted to a closure, because the customerProvider parameter’s type is marked with the @autoclosure attribute. (上面的serve(customer:)函数又个返回customer‘s name的显式闭包)</p>
+<pre><code>
+// customersInLine is ["Ewa", "Barry", "Daniella"]<br>
+func serve(customer customerProvider: @autoclosure () -> String) {<br>
+	print("Now serving \(customerProvider())!")<br>
+}<br>
+serve(customer: customersInLine.remove(at: 0))<br>
+// Prints "Now serving Ewa!"<br>
+</code></pre>
+<p>Overusing autoclosures can make your code hard to understand. The context and function name should make it clear that evaluation is being deferred. (过度使用自动闭包回使你的代码难以理解，它的上下文或函数名应该清楚地表明，代码将被推迟执行)</p>
+<p>If you want an autoclosure that is allowed to escape, use both the @autoclosure and @escaping attributes.(如果你想让一个自动闭包逃逸，那就同时用“@autoclosure”和“@escaping”标注)</p>
+<pre><code>
+
+
+// customersInLine is ["Barry", "Daniella"]<br>
+var customerProviders: [() -> String] = []<br>
+func collectCustomerProviders(_ customerProvider: @autoclosure @escaping () -> String) {<br>
+	customerProviders.append(customerProvider)<br>
+}<br>
+collectCustomerProviders(customersInLine.remove(at: 0))<br>
+collectCustomerProviders(customersInLine.remove(at: 0))<br>
+ 
+print("Collected \(customerProviders.count) closures.")<br>
+// Prints "Collected 2 closures."<br>
+for customerProvider in customerProviders {<br>
+	print("Now serving \(customerProvider())!")<br>
+}<br>
+// Prints "Now serving Barry!"<br>
+// Prints "Now serving Daniella!"<br>
+</code></pre>
+<p>In the code above, instead of calling the closure passed to it as its customerProvider argument, the collectCustomerProviders(_:) function appends the closure to the customerProviders array. The array is declared outside the scope of the function, which means the closures in the array can be executed after the function returns. As a result, the value of the customerProvider argument must be allowed to escape the function’s scope.</p>
+译自：<a link= https://developer.apple.com/library/prerelease/content/documentation/Swift/Conceptual/Swift_Programming_Language/Closures.html#//apple_ref/doc/uid/TP40014097-CH11-ID94>https://developer.apple.com/library/prerelease/content/documentation/Swift/Conceptual/Swift_Programming_Language/Closures.html#//apple_ref/doc/uid/TP40014097-CH11-ID94</a>
+<span><br>注：本文中有好多expression都该用了statement,因为这个发布器认为是不合法字符</span>
+	</body>
+</html>             
