@@ -1,0 +1,13 @@
+Windows Communication Foundation(WCF)是由微软开发的一系列支持数据通信的应用程序框架，可以翻译为Windows 通讯开发平台。
+整合了原有的windows通讯的 .net Remoting，WebService，Socket的机制，并融合有HTTP和FTP的相关技术。
+是Windows平台上开发分布式应用最佳的实践方式。
+简单的归结为四大部分
+1>.网络服务的协议，即用什么网络协议开放客户端接入。
+2>.业务服务的协议，即声明服务提供哪些业务。
+3>.数据类型声明，即对客户端与服务器端通信的数据部分进行一致化。
+4>.传输安全性相关的定义。它是.NET框架的一部分，由 .NET Framework3.0 开始引入，与Windows Presentation Foundation及Windows Workflow Foundation并行为新一代 Windows操作系统以及 WinFX 的三个重大应用程序开发类库。在 .NET Framework2.0 以及前版本中，微软发展了 Web Service(SOAP with HTTP communication)，.NET Remoting (TCP/HTTP/Pipeline communication) 以及基础的 Winsock 等通信支持。由于各个通信方法的设计方法不同，而且彼此之间也有相互的重叠性，对于开发人员来说，不同的选择会有不同的程序设计模型，而且必须要重新学习，让开发人员在使用中有许多不便。同时，面向服务架构(Service-Oriented Architecture) 也开始盛行于软件工业中，因此微软重新查看了这些通信方法，并设计了一个统一的程序开发模型，对于数据通信提供了最基本最有弹性的支持，这就是 Windows Communication Foundation。
+
+
+
+WCF 由于集合了几乎由.NET Framework提供的所有的通信方法，因此学习曲线比较陡峭，开发人员必须要针对各个部份的内涵做深入的了解，才能够操控 WCF 来开发应用程序。
+通信双方的沟通方式，由合约来订定。通信双方所遵循的通信方法，由协议绑定来订定。通信期间的安全性，由双方约定的安全性层次来订定。
