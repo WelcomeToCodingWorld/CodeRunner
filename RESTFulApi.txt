@@ -1,0 +1,65 @@
+http://www.ruanyifeng.com/blog/2014/05/restful_api.html
+https://codeplanet.io/principles-good-restful-api-design/
+
+
+Here’s a few of the important terms I will use throughout the course of this document:
+
+	Resource: A single instance of an object. For example, an animal.
+	Collection: A collection of homogeneous objects. For example, animals.
+	HTTP: A protocol for communicating over a network.
+	Consumer: A client computer application capable of making HTTP requests.
+	Third Party Developer: A developer not a part of your project but who wishes to consume your data.
+	Server: An HTTP server/application accessible from a Consumer over a network.
+	Endpoint: An API URL on a Server which represents either a Resource or an entire Collection.
+	Idempotent: Side-effect free, can happen multiple times without penalty.
+	URL Segment: A slash-separated piece of information in the URL.
+
+There are four and a half very important HTTP verbs that you need to know about. I say “and a half”, because the PATCH verb is very similar to the PUT verb, and two two are often combined by many an API developer. Here are the verbs, and next to them are their associated database call (I’m assuming most people reading this know more about writing to a database than designing an API).
+
+	GET (SELECT): Retrieve a specific Resource from the Server, or a listing of Resources.
+	POST (CREATE): Create a new Resource on the Server.
+	PUT (UPDATE): Update a Resource on the Server, providing the entire Resource.
+	PATCH (UPDATE): Update a Resource on the Server, providing only changed attributes.
+	DELETE (DELETE): Remove a Resource from the Server.
+
+Here are two lesser known HTTP verbs:
+
+	HEAD – Retrieve meta data about a Resource, such as a hash of the data or when it was last updated.
+	OPTIONS – Retrieve information about what the Consumer is allowed to do with the Resource
+	
+	
+A good RESTful API will make use of the four and a half HTTP verbs for allowing third parties to interact with its data, and will never include actions / verbs as URL segments.
+
+Typically, GET requests can be cached (and often are!) Browsers, for example, will cache GET requests (depending on cache headers), and will go as far as prompt the user if they attempt to POST for a second time. A HEAD request is basically a GET without the response body, and can be cached as well.
+
+
+Versioning
+
+No matter what you are building, no matter how much planning you do beforehand, your core application is going to change, your data relationships will change, attributes will invariably be added and removed from your Resources. This is just how software development works, and is especially true if your project is alive and used by many people (which is likely the case if you’re building an API).
+
+Remember than an API is a published contract between a Server and a Consumer. If you make changes to the Servers API and these changes break backwards compatibility, you will break things for your Consumer and they will resent you for it. Do it enough, and they will leave. To ensure your application evolves AND you keep your Consumers happy, you need to occasionally introduce new versions of the API while still allowing old versions to be accessible.
+
+As a side note, if you are simply ADDING new features to your API, such as new attributes on a Resource (which are not required and the Resource will function without), or if you are ADDING new Endpoints, you do not need to increment your API version number since these changes do not break backwards compatibility. You will want to update your API Documentation (your Contract), of course.
+
+Over time you can deprecate old versions of the API. To deprecate a feature doesn’t mean to shut if off or diminish the quality of it, but to tell Consumers of your API that the older version will be removed on a specific date and that they should upgrade to a newer version.
+
+A good RESTful API design will keep track of the version in the URL. The other most common solution is to put a version number in a request header, but after working with many different Third Party Developers, I can tell you that adding headers is no where near as easy as adding a URL Segment.
+
+
+
+API Root URL
+
+The root location of your API is important, believe it or not. When a developer (read as code archaeologist) inherits an old project using your API and needs to build new features, they may not know about your service at all. Perhaps all they know is a list of URLs which the Consumer calls out to. It’s important that the root entry point into your API is as simple as possible, as a long complex URL will appear daunting and can turn developers away.
+
+Here are two common URL Roots:
+
+	https://example.org/api/v1/*
+	https://api.example.com/v1/*
+
+If your application is huge, or you anticipate it becoming huge, putting the API on its own subdomain (e.g. api.) is a good choice. This can allow for some more flexible scalability down the road.
+
+If you anticipate your API will never grow to be that large, or you want a much simpler application setup (e.g. you want to host the website AND API from the same framework), placing your API beneath a URL segment at the root of the domain (e.g. /api/) works as well.
+
+It’s a good idea to have content at the root of your API. Hitting the root of GitHub’s API returns a listing of endpoints, for example. Personally, I’m a fan of having the root URL give information which a lost developer would find useful, e.g., how to get to the developer documentation for the API.
+
+Also, notice the HTTPS prefix. As a good RESTful API, you must host your API behind HTTPS.
