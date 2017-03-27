@@ -1,0 +1,4 @@
+sudo spctl --master-disable 安全与隐私
+
+lsof -i tcp:port 查看端口占用情况
+kill -9 pid 杀掉进程pid

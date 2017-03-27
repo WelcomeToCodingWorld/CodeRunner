@@ -1,0 +1,3 @@
+Jersey RESTful 框架是开源的RESTful框架, 实现了JAX-RS (JSR 311 & JSR 339) 规范。它扩展了JAX-RS 参考实现， 提供了更多的特性和工具， 可以进一步地简化 RESTful service 和 client 开发。尽管相对年轻，它已经是一个产品级的 RESTful service 和 client 框架。与Struts类似，它同样可以和hibernate,spring框架整合。
+由于Struts2+hibernate+spring整合在市场的占有率太高，所以很少一部分人去关注Jersey。所以网上有关于Jersey的介绍很少。但是它确实是一个非常不错的框架。对于请求式服务，对于GET,DELETE请求，你甚至只需要给出一个URI即可完成操作。
+举个简单的例子：如果你想获得服务器数据库中的所有数据；那么你可以在浏览器或者利用Ajax的GET方法，将路径设置好；例如：localhost:8080/Student(项目名称)/studentinfo(项目服务总体前缀)/student(处理student对象的签注)/getStudentInfo(最后前缀)。这样就可以获取所有学生信息。你可以选择GET获取的数据的返回类型：JSON,XML,TEXT_HTML(String)..获取之后，你可以通过JS将这些数据塞到html或者jsp页面上

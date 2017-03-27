@@ -1,0 +1,5 @@
+CLI（command-line interface，命令行界面）是指可在用户提示符下键入可执行指令的界面，它通常不支持鼠标，用户通过键盘输入指令，计算机接收到指令后，予以执行。
+
+
+其他：
+通用语言基础结构（Common Language Infrastructure，CLI）是CLR的一个子集，也就是.NET中最终对编译成MSIL代码的应用程序的运行环境进行管理的那一部分。在CLR结构图中CLI位于下半部分，主要包括类加载器(Class Loader)、实时编译器(IL To Native Compilers)和一个运行时环境的垃圾收集器(Garbage Collector)。CLI是.Net和CLR的灵魂，CLI为IL代码提供运行的环境，你可以将使用任何语言编写的代码通过其特定的编译器转换为MSIL代码之后运行其上，甚至还可以自己写MSIL代码在CLI上面运行。
