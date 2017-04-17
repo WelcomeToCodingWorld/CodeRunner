@@ -1,4 +1,4 @@
-$ sudo /usr/local/mysql/support-files/mysql.server start
+$ sudo /usr/local/mysql/support-files/mysql.server start  
 $ sudo /usr/local/mysql/support-files/mysql.server stop
 
 sudo /usr/local/mysql/bin/mysqld_safe --skip-grant-tables
@@ -33,3 +33,26 @@ The reason is very simple. MySQL could not open a table created in the earlier v
 
 mysql_enable="YES"
 mysql_args="--skip-grant-tables --skip-networking"
+
+
+Warning:The /usr/local/mysql/data/ directory is not owned by the 'mysql' or '_mysql' user
+
+Analyse:
+这应该是某种情况下导致/usr/local/mysql/data的宿主发生了改变，
+
+solution:
+只需要运行“sudo chown -R mysql /usr/local/mysql/data”即可
+
+mac 下面运行 “sudo chown -R  _mysql:wheel  /usr/local/mysql/data”
+
+-------------------------------------------------
+
+　　　　-c 显示更改的部分的信息
+
+　　　　-f 忽略错误信息
+
+　　　　-h 修复符号链接
+
+　　　　-R 处理指定目录以及其子目录下的所有文件
+
+　　　　-v 显示详细的处理信息v

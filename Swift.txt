@@ -76,7 +76,7 @@ Swift subclasses do not inherit their superclass initializers by default. Swift 
 
 
 Automatic initializer Inheritance:
-Assuming that you provide default values for any new propertied you introduce in a subclass:
+Assuming that you provide default values for any new properties you introduce in a subclass:
 Rule1:If your subclass doesn't define any designated initialzers,it automatically inherit all of the superclass designated initializers
 
 Rulu2:If your subclass implementatino of all of its superclass designated initializers---either by inheriting them as per rule 1,or providing a custom implementaion as part of its definition---then it inherits all of the superclass convenience initializers.

@@ -1,5 +1,9 @@
 <?php
-	header('Content-Type:application/json');	
+	header('Content-Type:application/json');
+	$headers = apache_request_headers();
+	foreach ($headers as $header => $value) {
+		echo "$header: $value <br />\n";
+	}	
 	@$uid = $_REQUEST['uid'] or die('{"code":-2,"msg":"用户编号不能为空"}');
 	require ('init_jd.php');
 	
