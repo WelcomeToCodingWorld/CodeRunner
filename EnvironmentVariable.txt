@@ -1,0 +1,16 @@
+Dynamic configuration is a convenient way to adjust the properties of your executable without recompiling your code. Rather than relying on hardcoded information, your application implements slightly different behaviors based on external settings. There are several ways to record these settings, ranging from user preferences to property lists stored with your bundle.
+
+Bundles use property lists extensively to store information about the bundle and its contents. macOS and iOS use the information in these property lists to determine an application properties such as its icon and whether to show the status bar (for iPhone applications).
+
+You should read this document to learn about the properties you can use to configure application behavior and specify how macOS or iOS handle your application
+
+
+Environment variables are another way to configure your application dynamically. Many applications and systems use environment variables to store important information, such as the location of executable programs and header files. The variable consists of a key string with the name of the variable and a value string.
+
+
+Environment variables are scoped to the process that created them and to any children of that process. The Terminal application treats each window as its own separate process for the sake of managing environment variables. Thus, if you create a Terminal window and define some environment variables, any programs you execute from that window inherit those variables. However, you cannot access the variables defined in the first window from a second Terminal window, and vice versa.
+
+Sessions can be inherited. For example, when a user logs in, the system creates a user session and defines a standard set of environment variables. Any processes launched by the user during the session inherit the user environment variables. However, this inheritance is a read-only relationship. Any changes made to the variable by a process remain local to that process and are not inherited by other processes.
+
+
+

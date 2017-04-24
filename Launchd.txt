@@ -1,0 +1,1 @@
+In computing, launchd, a unified service-management framework, starts, stops and manages daemons, applications, processes, and scripts.
