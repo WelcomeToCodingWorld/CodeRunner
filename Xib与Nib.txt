@@ -1,0 +1,8 @@
+xib文件可以被Xcode编译成nib文件，xib文件本质上是一个xml文件，而nib文件就是编译后的二进制文件，该文件将视图等控件对象封装了起来，而在程序运行起来后，这些对象会被激活。
+
+xib文件本质上是一个xml文件，可以用vim或cat命令查看，例如：
+
+$ cat ~/Desktop/JLN-1_xib/JLN-1_xib/GrayViewController.xib
+
+
+nib文件可以在程序的Build目录下找到。
