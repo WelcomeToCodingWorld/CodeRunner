@@ -1,0 +1,10 @@
+1. storedProperty:let or var
+2. computedProperty: var (because they are not fixed)
+3. observer: storedProperty or inherited property(computed or stored)
+4. getter and optional setter: computed property
+5. lazy stored property : var -> because its initial value might not be retrieved until after instance initialization completes. Constant properties must always have a value before initialization completes, and therefore cannot be declared as lazy.
+6. storedProperty : class  struct
+7. computedProperty :class struct enumeration
+8. always give stored type property a default value -> because the type itself does not have an initializer that can assign a value to a stored type property at initialization time
+9. stored type property are initialized on their first access , does not need to be marked with the lazy modifier
+10. class : computed type property for class type

@@ -3,3 +3,24 @@
 先pull，因为两个仓库不同，发现refusing to merge unrelated histories，无法pull
 
 因为他们是两个不同的项目，要把两个不同的项目合并，git需要添加一句代码，在git pull，这句代码是在git 2.9.2版本发生的，最新的版本需要添加--allow-unrelated-histories
+
+
+git checkout -b dev origin/dev
+
+git checkout命令加上-b参数表示创建并切换
+
+git remote add origin git@server-name:path/repo-name.git
+
+
+
+git push -u origin master
+
+加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+
+git remote update
+git fetch
+
+fatal: git checkout: updating paths is incompatible with switching branches.
+Did you intend to checkout 'origin/remote-name' which can not be resolved as commit?
+
+http://stackoverflow.com/questions/945654/git-checkout-updating-paths-is-incompatible-with-switching-branches
