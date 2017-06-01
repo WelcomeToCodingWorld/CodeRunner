@@ -7,4 +7,10 @@
 7. computedProperty :class struct enumeration
 8. always give stored type property a default value -> because the type itself does not have an initializer that can assign a value to a stored type property at initialization time
 9. stored type property are initialized on their first access , does not need to be marked with the lazy modifier
-10. class : computed type property for class type
+10. class : computed type property for class type(allow override) , type method(allow override) 
+11. always prefix type property requirements with the static keyword when define them in a protocol.
+12. do not write the override modifier when overriding a required designated initializer
+13. use a closure or global funtion to setup or customize the default value of a stored property
+14.  If you use a closure to initialize a property, remember that the rest of the instance has not yet been initialized at the point that the closure is executed. This means that you cannot access any other property values from within your closure, even if those properties have default values. You also cannot use the implicit self property, or call any of the instance’s methods. 
+15. is as! as?
+16. optional protocol requirements

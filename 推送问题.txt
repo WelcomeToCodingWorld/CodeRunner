@@ -1,0 +1,11 @@
+PHP Warning:  stream_socket_client(): SSL operation failed with code 1.
+OpenSSL Error messages:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed in /Users/zz/Desktop/推送证书/NotificationTest/pushMe.php on line 21
+PHP Warning:  stream_socket_client(): Failed to enable crypto in /Users/zz/Desktop/推送证书/NotificationTest/pushMe.php on line 21
+PHP Warning:  stream_socket_client(): unable to connect to ssl://gateway.sandbox.push.apple.com:2195 (Unknown error) in /Users/zz/Desktop/推送证书/NotificationTest/pushMe.php on line 21
+Failed to connect: 0 
+
+
+
+
+

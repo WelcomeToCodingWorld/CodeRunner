@@ -1,0 +1,9 @@
+1.Memory is allocated for the instance variables of each new object, but there’s no need to allocate memory for methods. All an instance needs is access to its methods, and all instances of the same class share access to the same set of methods. There’s only one copy of the methods in memory, no matter how many instances of the class are created.
+
+2.Using the static storage class designator to limit the scope of names to just the files where they’re declared enhances the independence of source modules. This kind of module is a unit defined by the file system .
+
+3.The subclass definition specifies only how it differs from the superclass; everything else is taken to be the same.
+
+4.Note that methods generally can’t be disinherited and instance variables can’t be removed or overridden.
+
+5.Dynamic loading refers to the process of separately loading new or additional parts of a program and linking them dynamically to the parts already running.

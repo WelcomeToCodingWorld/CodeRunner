@@ -1,4 +1,4 @@
-1.请求交互类型授权 UN （config user interactions）（如果要及时交互那就用alert，否则用sound和badge）
+1.请求交互类型授权 UN （configure user interactions）（如果要及时交互那就用alert，否则用sound和badge）
 
 2.注册通知类别 UN
 
@@ -12,7 +12,7 @@
 
 7.app处于not running或background状态时，系统自动用你指定的交互方式来传递通知。如果用户选择了一个action或者选择了某个标准的系统交互，系统会通知你的app
 
-8.如果app处于foreground，通知会直接传递给app，你可以决定时静默处理(系统默认)还是提醒用户（需要实现UNCenter的代理方法：userNotificationCenter:willPresentNotification:withCompletionHandler:，只有app在前台收到通知时才会调用该方法）
+8.如果app处于foreground，通知会直接传递给app，你可以决定是静默处理(系统默认)还是提醒用户（需要实现UNCenter的代理方法：userNotificationCenter:willPresentNotification:withCompletionHandler:，只有app在前台收到通知时才会调用该方法）
 
 9.要响应通知的传递必须实现UNCenter的代理，如果有自定义动作按钮，代理是必须的。
 
@@ -30,6 +30,7 @@
 
 14.另外可以分别用notification service app extension和notification content app extension来改变payload的内容和自定义通知界面
 
-15.总之处理通知，不管是本地的还是远程的foreground )：用userNotificationCenter:willPresentNotification:withCompletionHandler:处理
+15.总之处理通知，
+不管是本地的还是远程的foreground )：用userNotificationCenter:willPresentNotification:withCompletionHandler:处理
 background)：用userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:
-;如果时远程通知还可以用application:didReceiveRemoteNotification:fetchCompletionHandler:
+;如果是远程通知还可以用application:didReceiveRemoteNotification:fetchCompletionHandler:
