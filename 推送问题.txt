@@ -7,5 +7,19 @@ Failed to connect: 0
 
 
 
+解决方法：
+First: Check certificate file location which will be in default_cert_file key, you will found it in openssl_get_cert_locations() its php openssl function:
+
+php -r "print_r(openssl_get_cert_locations());"
+
+Second: Download http://curl.haxx.se/ca/cacert.pem
+
+
+Third: Copy certificate PEM file into default_cert_file location:
+
+sudo mv cacert.pem /opt/lampp/share/openssl/cert.pem
+
+
+
 
 
