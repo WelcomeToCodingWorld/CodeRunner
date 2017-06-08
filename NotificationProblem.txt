@@ -1,0 +1,6 @@
+1. 当app再后台运行时，用户忽略的通知该如何处理
+2.当app处于NotRunning状态时，用户忽略的通知如何处理
+3.如何自定义远程通知的交互界面 : Remote notifications that include a category key in their payload display buttons for the actions in the corresponding category.
+4.appdelegate不处理defaultAction吗？：是的
+5.Localizing the content of remote notifications
+6.Action-loc-key不起作用，并没有Close和Button的Alert

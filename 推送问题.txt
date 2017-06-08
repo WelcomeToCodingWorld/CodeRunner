@@ -20,6 +20,12 @@ Third: Copy certificate PEM file into default_cert_file location:
 sudo mv cacert.pem /opt/lampp/share/openssl/cert.pem
 
 
+Note：
+1.The ability of APNs to deliver remote notifications to a nonrunning app requires the app to have been launched at least once.
+2.On an iOS device, if a user force-quits your app using the app multitasking UI, the app does not receive remote notifications until the user relaunches it. 
+ 
+
+
 
 
 

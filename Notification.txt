@@ -34,3 +34,5 @@
 不管是本地的还是远程的foreground )：用userNotificationCenter:willPresentNotification:withCompletionHandler:处理
 background)：用userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:
 ;如果是远程通知还可以用application:didReceiveRemoteNotification:fetchCompletionHandler:
+
+16.In the system’s notification interface, users can explicitly dismiss the notification interface or launch your app instead of selecting one of your custom actions.Dismissing the interface involves tapping an applicable button or closing the interface directly; ignoring a notification or flicking a notification banner away does not represent an explicit dismissal.
