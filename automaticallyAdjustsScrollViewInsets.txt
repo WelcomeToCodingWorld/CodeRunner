@@ -1,0 +1,20 @@
+//应该明确这些点：当设置了automaticallyAdjustsScrollViewInsets时
+	//1.可滑动区域始终从NavigationBar的MaxY下方开始
+	//2.会自定在设定的contentInset.y上加20+44
+	//3.至于contentOffset,一般情况下，出现负值的情况很短暂，只要滑动为负值就会恢复(弹回)为零
+	//4.当在viewDidLoad()中设置Offset.y为负值，就会自动设置为0，设置为正值是会体现在初始UI状态上
+	
+可以在viewWilllayoutSubviews()中设置UI的初始状态
+
+tintColor, UIAppearance,  shadowColor, shadowOffset,interactivePopGestureRecognizer(enable)
+
+viewWillAppear() 手动调用的时机问题
+
+钩子方法
+
+
+重写constant property没有意义
+可以重写variable property (whether stored or computed)重写其getter和setter或者(对于variable stored property)willSet和didSet
+
+关于initializer的自动继承：1.如果没有任何designed  initializer则，自动继承所有父类的designed initializer
+2.如果集成了父类全部的designed initializaer，则也继承了全部的convenience initializer 

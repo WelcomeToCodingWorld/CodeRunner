@@ -1,0 +1,2 @@
+1.Library , Module , Framework
+2. NSCoding.Type

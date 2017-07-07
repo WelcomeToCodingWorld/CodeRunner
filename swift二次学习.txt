@@ -14,3 +14,4 @@
 14.  If you use a closure to initialize a property, remember that the rest of the instance has not yet been initialized at the point that the closure is executed. This means that you cannot access any other property values from within your closure, even if those properties have default values. You also cannot use the implicit self property, or call any of the instance’s methods. 
 15. is as! as?
 16. optional protocol requirements
+17.只有参数顺序不同的函数是否是相同的函数：当然不是
