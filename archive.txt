@@ -1,0 +1,9 @@
+<DVTSigningCertificate: 0x7ffe89e76b00; 
+name='iPhone Developer: ari li (Y9JNVDKN42)', hash='48C3546AFB27853D698FE5A27121342AFBB3BBC0', serialNumber='4F66D8307698CC4D', certificateKind='1.2.840.113635.100.6.1.2, issueDate='2017-09-11 07:50:01 +0000''> due to certificateKind (input 1.2.840.113635.100.6.1.4 doesn't match 1.2.840.113635.100.6.1.2)
+
+
+
+2017-09-11 08:37:01 +0000  -[IDEDistributionProvisioning _signingCertificatesApplicableForTeamID:certificateKind:isForInstaller:error:]: identityCertificatesMatchingKind [kind=1.2.840.113635.100.6.1.4] = (
+	"<DVTSigningCertificate: 0x7ffe838fb960;
+	 name='iPhone Distribution: Chongqing LeZhanDa Technology Co., Ltd (YD6H32NYXJ)', hash='BEA651DE19EC92E6A1161BE2435CBEA48C6A7172', serialNumber='509827471875BB4F', certificateKind='1.2.840.113635.100.6.1.4, issueDate='2017-09-11 08:05:39 +0000''>"
+)

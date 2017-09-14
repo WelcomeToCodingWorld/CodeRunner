@@ -9,12 +9,20 @@ openssl pkcs12 -nocerts -out PushChatKey.pem -in Push.p12
 3.对生成的这两个pem文件再生成一个pem文件，来把证书和私钥整合到一个文件里：
 cat PushChatCert.pem PushChatKey.pem > ck.pem
 
+
+
+
 测试：
 1.telnet gateway.sandbox.push.apple.com 2195  //它将尝试发送一个规则的，不加密的连接到APNS服务
 
 2.下面我们要使用我们生成的SSL证书和私钥来设置一个安全的链接去链接苹果服务器：
 openssl s_client -connect gateway.sandbox.push.apple.com:2195 -cert PushChatCert.pem -key PushChatKey.pem
+openssl s_client -connect gateway.push.apple.com:2195 -cert PushChatCert.pem
 
 可能会显示：
 verify error:num=20:unable to get local issuer certificate
 verify return:0
+
+
+convert p12 to pem:
+openssl pkcs12 -in aps_distribution.p12 -out dis_apskey.pem -nodes

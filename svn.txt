@@ -1,1 +1,5 @@
 https://liuzhiyou@192.168.0.228/svn/cstv2.0
+
+http://svnbook.red-bean.com/
+https://tortoisesvn.net/docs/nightly/TortoiseSVN_en/tsvn-dug-conflicts.html#tsvn-dug-conflicts-tree-1
+http://svnbook.red-bean.com/nightly/en
