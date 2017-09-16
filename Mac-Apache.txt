@@ -1,0 +1,71 @@
+zzdeMac-mini:Sites zz$ sudo apachectl -k start
+Password:
+AH00112: Warning: DocumentRoot [/usr/docs/dummy-host.example.com] does not exist
+AH00112: Warning: DocumentRoot [/usr/docs/dummy-host2.example.com] does not exist
+httpd (pid 101) already running
+
+
+
+
+
+/*Apache 配置*/   http://www.jianshu.com/p/7b8d5d6f22c9
+sudo apachectl -v
+sudo apachectl start 
+sudo apachectl restart
+
+
+1.主配置文件：
+/etc/apache2/httpd.conf
+
+备份配置文件：
+sudo cp /etc/apache2/httpd.conf /etc/apache2/httpd.conf.backup
+
+修改配置文件：
+
+181行 User _www Group _www
+改为(rootname为本机用户名) User rootname Group wheel 
+
+219行 <Directory /> AllowOverride none Require all denied </Directory> 
+改为（修改apache配置:设置访问代理资源被默认不受限制） <Directory /> Require all granted AllowOverride all </Directory> 
+498行 # Virtual hosts #Include /private/etc/apache2/extra/httpd-vhosts.conf 
+改为(去掉前面的#，这样就开启了httpd-vhosts虚拟主机文件) # Virtual hosts Include /private/etc/apache2/extra/httpd-vhosts.conf
+
+
+设置虚拟主机
+2.虚拟主机配置文件：
+/etc/apache2/extra/httpd-vhosts.conf
+
+备份配置文件
+sudo cp /etc/apache2/extra/httpd-vhosts.conf /etc/apache2/extra/httpd-vhosts.conf.backup
+
+修改配置文件：
+//在文件里加入,前面的例子可以用＃ 注释掉
+<VirtualHost *:80> 
+DocumentRoot "项目文档根目录" 
+ServerName 服务器名称 
+ErrorLog "/private/var/log/apache2/mysites-error_log" 
+CustomLog "/private/var/log/apache2/mysites-access_log" common 
+<Directory "项目文档根目录"> 
+Options FollowSymLinks 
+Multiviews Indexes MultiviewsMatch 
+Any AllowOverride None 
+Require all granted 
+</Directory> 
+<Proxy *> 
+Order deny,allow
+Allow from all 
+</Proxy> 
+// 配置请求转发服务器 和 环境路径(反向代理) 
+ProxyPass /web http://example.com/web 
+ProxyPassReverse /web http://example.com/web 
+</VirtualHost>
+
+3.设置hosts
+/etc/hosts
+
+加入
+127.0.0.1       你的网站地址
+
+4.重启apache
+sudo apachectl restart
+

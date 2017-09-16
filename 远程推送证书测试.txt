@@ -1,4 +1,4 @@
-证书转换：
+证书转换：https://www.bbsmax.com/A/Gkz1XjwrdR/
 1.把.cer的SSL证书转换为.pem文件，执行命令：
 openssl x509 -in aps_development.cer -inform der -out PushChatCert.pem
 
@@ -11,6 +11,7 @@ cat PushChatCert.pem PushChatKey.pem > ck.pem
 
 
 
+C# Server End:http://www.googleplus.party/2017/01/18/PushNotification-in-C-Objective-c-C/
 
 测试：
 1.telnet gateway.sandbox.push.apple.com 2195  //它将尝试发送一个规则的，不加密的连接到APNS服务
