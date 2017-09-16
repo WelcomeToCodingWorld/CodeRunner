@@ -7,7 +7,9 @@ httpd (pid 101) already running
 
 
 
-
+https://jason.pureconcepts.net/2012/10/install-apache-php-mysql-mac-os-x/
+http://www.jianshu.com/p/2fb9a3bb12f6
+http://www.jianshu.com/p/d006a34a343f
 /*Apache 配置*/   http://www.jianshu.com/p/7b8d5d6f22c9
 sudo apachectl -v
 sudo apachectl start 
@@ -68,4 +70,25 @@ ProxyPassReverse /web http://example.com/web
 
 4.重启apache
 sudo apachectl restart
+
+
+
+<VirtualHost *:443> 
+#General setup for the virtual host 
+DocumentRoot "/Library/WebServer/Documents" 
+ServerName local.server.com 
+#SSL Engine Switch: 
+SSLEngine on 
+#Server Certificate: 
+SSLCertificateFile "/etc/apache2/ssl/local.server.com.crt" 
+#Server Private Key: 
+SSLCertificateKeyFile "/etc/apache2/ssl/local.server.com.key" 
+#SSL Engine Options: 
+<FilesMatch "\.(cgi|shtml|phtml|php)$"> 
+SSLOptions +StdEnvVars
+ </FilesMatch> 
+<Directory "/Library/WebServer/CGI-Executables"> 
+SSLOptions +StdEnvVars
+ </Directory>
+ </VirtualHost>
 
