@@ -1,17 +1,23 @@
-zzdeMac-mini:Sites zz$ sudo apachectl -k start
+]zzdeMac-mini:Sites zz$ sudo apachectl -k start
 Password:
 AH00112: Warning: DocumentRoot [/usr/docs/dummy-host.example.com] does not exist
 AH00112: Warning: DocumentRoot [/usr/docs/dummy-host2.example.com] does not exist
 httpd (pid 101) already running
 
 
+//reference
+https://zhangzhaopds.github.io/2016/12/26/Mac%E4%B8%AD%E5%BC%80%E5%90%AFApache%E7%9A%84Https%E5%8A%9F%E8%83%BD/
+https://gist.github.com/jonathantneal/774e4b0b3d4d739cbc53
 
 
-
+search： mac apache 简书
+http://www.jianshu.com/p/d006a34a343f
 /*Apache 配置*/   http://www.jianshu.com/p/7b8d5d6f22c9
 sudo apachectl -v
+sudo apachectl -t //检查语法
 sudo apachectl start 
 sudo apachectl restart
+sudo apachectl -e debug
 
 
 1.主配置文件：
