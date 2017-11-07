@@ -1,0 +1,6 @@
+Argument of '#selector' refers to instance method 'networkStautsDidChanged()' that is not exposed to Objective-C
+
+'required' initializer 'init(coder:)' must be provided by subclass of 'UIView'
+
+
+struct
