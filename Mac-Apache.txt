@@ -9,6 +9,8 @@ httpd (pid 101) already running
 https://zhangzhaopds.github.io/2016/12/26/Mac%E4%B8%AD%E5%BC%80%E5%90%AFApache%E7%9A%84Https%E5%8A%9F%E8%83%BD/
 https://gist.github.com/jonathantneal/774e4b0b3d4d739cbc53
 
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain /etc/apache2/ssl/localhost.crt
+
 
 search： mac apache 简书
 https://jason.pureconcepts.net/2012/10/install-apache-php-mysql-mac-os-x/
